@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Normal? - Cat Behavior Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--color-white);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            padding: 40px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .page-description {
+            color: var(--color-text);
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 0 30px 40px;
+        }
+
+        /* Section Styling */
+        .behavior-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: var(--color-primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--color-light-gray);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            font-weight: 500;
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .info-card li strong {
+            color: var(--color-primary);
+        }
+
+        /* Normal behaviors card styling */
+        .normal-card {
+            border-top-color: var(--color-success);
+        }
+
+        .normal-card::before {
+            background: linear-gradient(90deg, var(--color-success) 0%, var(--color-accent-teal) 100%);
+        }
+
+        .normal-card h4 {
+            color: var(--color-success);
+        }
+
+        /* Monitor behaviors card styling */
+        .monitor-card {
+            border-top-color: var(--color-warning);
+        }
+
+        .monitor-card::before {
+            background: linear-gradient(90deg, var(--color-warning) 0%, var(--color-accent-yellow) 100%);
+        }
+
+        .monitor-card h4 {
+            color: var(--color-warning);
+        }
+
+        /* Concerning behaviors card styling */
+        .concerning-card {
+            border-top-color: var(--color-danger);
+        }
+
+        .concerning-card::before {
+            background: linear-gradient(90deg, var(--color-danger) 0%, var(--color-secondary) 100%);
+        }
+
+        .concerning-card h4 {
+            color: var(--color-danger);
+        }
+
+        /* Bonding behaviors card styling */
+        .bonding-card {
+            border-top-color: var(--color-accent-purple);
+        }
+
+        .bonding-card::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 100%);
+        }
+
+        .bonding-card h4 {
+            color: var(--color-accent-purple);
+        }
+
+        /* Body Language Section */
+        .body-language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .language-card {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid var(--color-info);
+            transition: all 0.3s ease;
+        }
+
+        .language-card:nth-child(1) { border-left-color: var(--color-success); }
+        .language-card:nth-child(2) { border-left-color: var(--color-warning); }
+        .language-card:nth-child(3) { border-left-color: var(--color-danger); }
+        .language-card:nth-child(4) { border-left-color: var(--color-info); }
+
+        .language-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .language-card h5 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .language-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .language-card li {
+            padding: 8px 0;
+            color: var(--color-text);
+            font-weight: 500;
+            border-bottom: 1px solid var(--color-medium-gray);
+        }
+
+        .language-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Alert Styling */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .alert-danger {
+            background: var(--bg-danger);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .page-header {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 2em;
+            }
+            
+            .content-area {
+                padding: 0 20px 30px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .body-language-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_signs_doing_great.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Signs you're doing great</span>
+                </a>
+                <a href="2_whats_normal_page.html" class="journey-phase active">
+                    <span class="phase-number">2</span>
+                    <span>What's normal?</span>
+                </a>
+                <a href="3_troubleshooting_guide.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Troubleshooting</span>
+                </a>
+            </div>
+        </div>
+        
+        <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">🤔 What's Normal?</h1>
+            <p class="page-subtitle">Understanding Cat Behaviors</p>
+            <p class="page-description">Learn what's normal, what needs attention, and what requires action</p>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Normal Behaviors Section -->
+            <div class="behavior-section">
+                <h2 class="section-title">✅ Normal Behaviors (Don't Worry!)</h2>
+                <div class="card-grid">
+                    <div class="info-card normal-card">
+                        <h4>😸 Everyday Normal Behaviors</h4>
+                        <ul>
+                            <li><strong>Kneading:</strong> Pushing paws into soft surfaces while purring - shows contentment</li>
+                            <li><strong>Head butting & cheek rubbing:</strong> Marking territory and showing affection</li>
+                            <li><strong>Chattering at birds:</strong> Natural hunting instinct when watching prey</li>
+                            <li><strong>Zoomies:</strong> Sudden bursts of running/jumping, especially after litter box</li>
+                            <li><strong>Bringing "gifts":</strong> Toys or objects presented proudly with meowing</li>
+                            <li><strong>Sleeping 12-16 hours daily:</strong> Natural cat sleep pattern</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitor & Address Section -->
+            <div class="behavior-section">
+                <h2 class="section-title">⚠️ Monitor & Address</h2>
+                <div class="card-grid">
+                    <div class="info-card monitor-card">
+                        <h4>👀 Behaviors to Watch & Redirect</h4>
+                        <ul>
+                            <li><strong>Excessive furniture scratching:</strong> Provide better alternatives, redirect behavior</li>
+                            <li><strong>Litter box avoidance:</strong> Check cleanliness, location; consult vet if persists</li>
+                            <li><strong>Excessive vocalization:</strong> May indicate pain, anxiety, or attention-seeking</li>
+                            <li><strong>Aggressive play biting:</strong> Redirect to toys, never use hands for play</li>
+                            <li><strong>Extended hiding:</strong> May indicate illness, stress, or fear</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concerning Behaviors Section -->
+            <div class="behavior-section">
+                <h2 class="section-title">🚨 Concerning - Vet Needed</h2>
+                <div class="alert alert-danger">
+                    <span>🚨</span>
+                    <div>
+                        <strong>Emergency Alert:</strong> These behaviors require immediate veterinary attention. Don't wait - contact your vet or emergency clinic right away.
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="info-card concerning-card">
+                        <h4>🩺 Immediate Vet Attention Required</h4>
+                        <ul>
+                            <li><strong>Straining in litter box:</strong> Potential blockage - immediate vet attention</li>
+                            <li><strong>Sudden appetite loss:</strong> No eating for 24+ hours needs prompt vet care</li>
+                            <li><strong>Lethargy with other symptoms:</strong> Combined with vomiting, diarrhea, breathing changes</li>
+                            <li><strong>Breathing difficulties:</strong> Open-mouth breathing, rapid breathing at rest</li>
+                            <li><strong>Excessive grooming:</strong> Creating bald patches or skin irritation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Positive Bonding Section -->
+            <div class="behavior-section">
+                <h2 class="section-title">💙 Positive Bonding Signs</h2>
+                <div class="card-grid">
+                    <div class="info-card bonding-card">
+                        <h4>🥰 Signs Your Cat Loves You</h4>
+                        <ul>
+                            <li><strong>Slow blinking:</strong> "Cat kisses" - return the slow blink!</li>
+                            <li><strong>Following you around:</strong> Shows attachment and companionship desire</li>
+                            <li><strong>Exposing belly:</strong> Ultimate sign of trust (admire, don't always touch!)</li>
+                            <li><strong>Purring when touched:</strong> Shows contentment and enjoyment</li>
+                            <li><strong>Grooming you:</strong> Treating you as family - high honor!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Language Guide Section -->
+            <div class="behavior-section">
+                <h2 class="section-title">📖 Quick Body Language Guide</h2>
+                <div class="body-language-grid">
+                    <div class="language-card">
+                        <h5>😊 Relaxed/Happy:</h5>
+                        <ul>
+                            <li>Ears forward</li>
+                            <li>Tail up or gently moving</li>
+                            <li>Slow blinking</li>
+                            <li>Normal posture</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="language-card">
+                        <h5>😰 Stressed/Fearful:</h5>
+                        <ul>
+                            <li>Ears back or flattened</li>
+                            <li>Low body posture</li>
+                            <li>Hiding or freezing</li>
+                            <li>Dilated pupils</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="language-card">
+                        <h5>😡 Aggressive/Angry:</h5>
+                        <ul>
+                            <li>Arched back</li>
+                            <li>Puffed fur</li>
+                            <li>Hissing or growling</li>
+                            <li>Swatting motions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="language-card">
+                        <h5>🔍 Alert/Interested:</h5>
+                        <ul>
+                            <li>Ears perked forward</li>
+                            <li>Tail still or twitching tip</li>
+                            <li>Focused gaze</li>
+                            <li>Slightly crouched</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Remember:</strong> Every cat is unique! These are general guidelines. When in doubt about your cat's behavior, always consult with your veterinarian for personalized advice.
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
