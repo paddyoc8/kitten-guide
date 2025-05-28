@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Few Days - Kitten Care Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette as template
+           ========================================================================== */
+        :root {
+            /* Primary Colors - Lighter Navy */
+            --color-primary: #5f7cae;           /* Lighter, brighter navy */
+            --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+            --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+            
+            /* Secondary Colors - Warmer Pink */
+            --color-secondary: #e8637a;         /* Warm coral-pink */
+            --color-secondary-light: #ed8296;   /* Lighter warm pink */
+            
+            /* Neutral Colors */
+            --color-white: #ffffff;
+            --color-light-gray: #f8f9fa;
+            --color-medium-gray: #e9ecef;
+            --color-dark-gray: #6c757d;
+            --color-text: #2c3e50;
+            --color-text-light: #6c757d;
+            
+            /* Status Colors - Softened Brights */
+            --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+            --color-warning: #e6941a;           /* Softened orange */
+            --color-danger: #e84545;            /* Muted coral red */
+            --color-info: #4a9de8;              /* Softened sky blue */
+            
+            /* Background Colors */
+            --bg-success: #e8f8f2;
+            --bg-warning: #fff8e1;
+            --bg-danger: #ffebee;
+            --bg-info: #e3f2fd;
+            
+            /* Border Colors */
+            --border-success: #c8f2e0;
+            --border-warning: #ffe0b2;
+            --border-danger: #ffcdd2;
+            --border-info: #bbdefb;
+            
+            /* Additional Muted Accents */
+            --color-accent-yellow: #f0d429;     /* Muted yellow */
+            --color-accent-purple: #9c3fa3;     /* Softened purple */
+            --color-accent-teal: #2e9688;       /* Muted teal */
+            --color-accent-coral: #e65a33;      /* Softened coral */
+            
+            /* Special Colors */
+            --color-muted: #8a9bb5;             /* Muted version of primary blue */
+            --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+            --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+            --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+            --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+            --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+            --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 40px;
+            overflow-y: auto;
+            background: var(--color-white);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Timeline Component */
+        .timeline-container {
+            background: linear-gradient(135deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--color-white);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(46, 150, 136, 0.2);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timeline-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .day-schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .day-card {
+            background: var(--color-white-alpha-20);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-white-alpha-30);
+            text-align: center;
+        }
+
+        .day-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--color-accent-yellow);
+            margin-bottom: 10px;
+        }
+
+        /* Play Session Styles */
+        .play-session-card {
+            background: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-primary) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(156, 63, 163, 0.2);
+        }
+
+        .play-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .play-tip {
+            background: var(--color-white-alpha-20);
+            border-radius: 10px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .play-tip strong {
+            color: var(--color-accent-yellow);
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + * {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .day-schedule {
+                grid-template-columns: 1fr;
+            }
+            
+            .play-tips {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Special highlight boxes */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: var(--color-white);
+            margin: 20px 0;
+            box-shadow: 0 6px 24px rgba(232, 99, 122, 0.2);
+        }
+
+        .highlight-box h4 {
+            margin-bottom: 10px;
+            color: var(--color-white);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 First Few Days Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_arrival_day_page.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Arrival day</span>
+                </a>
+                <a href="2_first_few_days.html" class="journey-phase active">
+                    <span class="phase-number">2</span>
+                    <span>First days</span>
+                </a>
+                <a href="3_transition_week.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Transition week</span>
+                </a>
+                <a href="4_expansion_week_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Expansion week</span>
+                </a>
+                <a href="5_freedom_week_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Freedom week</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">🏠 First Few Days at Home</h1>
+                    <p class="page-subtitle">Building trust and routine during the critical adjustment period</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <span>🕐</span>
+                    <div>
+                        <strong>Remember:</strong> The first few days are crucial for building trust and establishing routines. Every kitten adjusts at their own pace—follow their lead and remain patient.
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div class="timeline-header">
+                        <h3>📅 First Week Timeline</h3>
+                        <p>A gentle approach to helping your kitten settle in</p>
+                    </div>
+                    <div class="day-schedule">
+                        <div class="day-card">
+                            <div class="day-number">Day 1</div>
+                            <p><strong>Arrival & Safe Room</strong></p>
+                            <p>Let kitten explore safe room at their own pace. Minimal interaction.</p>
+                        </div>
+                        <div class="day-card">
+                            <div class="day-number">Days 2-3</div>
+                            <p><strong>Building Trust</strong></p>
+                            <p>Short, gentle visits. Let kitten approach you. Begin basic handling.</p>
+                        </div>
+                        <div class="day-card">
+                            <div class="day-number">Days 4-5</div>
+                            <p><strong>Extending Comfort</strong></p>
+                            <p>Longer visits if kitten is comfortable. Gentle play sessions.</p>
+                        </div>
+                        <div class="day-card">
+                            <div class="day-number">Days 6-7</div>
+                            <p><strong>Gradual Expansion</strong></p>
+                            <p>Consider expanding territory if confident. Maintain routines.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="play-session-card">
+                    <h3>🎮 Play Session Guidelines</h3>
+                    <p>Proper play is essential for bonding and healthy development</p>
+                    
+                    <div class="play-tips">
+                        <div class="play-tip">
+                            <strong>Duration:</strong> Keep sessions short and gentle (5-10 minutes)
+                        </div>
+                        <div class="play-tip">
+                            <strong>Initiation:</strong> Let the kitten initiate play when possible
+                        </div>
+                        <div class="play-tip">
+                            <strong>Toys:</strong> Use soft toys, string toys, or wands
+                        </div>
+                        <div class="play-tip">
+                            <strong>Ending:</strong> Slow toy movement to mimic it 'becoming tired'
+                        </div>
+                        <div class="play-tip">
+                            <strong>Reward:</strong> End with a treat and put toy away
+                        </div>
+                        <div class="play-tip">
+                            <strong>Safety:</strong> Stop if kitten pants or becomes frantic
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h4>🎯 Signs Kitten Wants to Play</h4>
+                        <ul>
+                            <li>🐾 Pouncing on fingers or shoelaces</li>
+                            <li>🏐 Batting at hanging objects</li>
+                            <li>🎪 Play bows (front end down, rear up)</li>
+                            <li>🧸 Bringing toys to you</li>
+                            <li>⚡ Sudden bursts of energy</li>
+                            <li>🍃 Chasing their tail or shadows</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>✅ Extend Visits When You See</h4>
+                        <ul>
+                            <li>😊 Kitten approaches confidently</li>
+                            <li>🎵 Purring when you're present</li>
+                            <li>😌 Relaxed body language</li>
+                            <li>👀 Curious exploration behavior</li>
+                            <li>🤲 Seeking pets or attention</li>
+                            <li>🛏️ Comfortable enough to nap nearby</li>
+                        </ul>
+                        <div class="highlight-box">
+                            <h4>🎯 Key Principle</h4>
+                            <p>Follow their lead rather than a strict timeline. Every kitten adjusts differently!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🤲 Socialization & Handling</h3>
+                    <p>Begin gentle handling to help your kitten become comfortable with human touch</p>
+                    
+                    <div class="card-grid" style="margin-top: 20px;">
+                        <div class="info-card">
+                            <h4>📋 Handling Checklist</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Begin with very short handling periods (30 seconds)</span>
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Gently touch ears to get kitten used to ear cleaning</span>
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Handle paws for future nail trimming</span>
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Stroke chin and face for bonding</span>
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Use treats during handling sessions</span>
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Offer gentle praise throughout</span>
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox">
+                                    <span>Gradually increase handling time as kitten relaxes</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🔊 Sound Management</h4>
+                            <ul>
+                                <li>🔇 Keep household sounds at low volume</li>
+                                <li>📺 Introduce TV/music gradually</li>
+                                <li>🚪 Minimize door slamming</li>
+                                <li>📱 Keep phone volumes low</li>
+                                <li>🥄 Be gentle with dishes and utensils</li>
+                                <li>👥 Brief guests on quiet behavior</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Avoid Overwhelming:</strong> Never force interactions. If your kitten shows signs of stress (hiding, hissing, trembling), give them more time and space. Some kittens need several days to a week to feel comfortable.
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>📝 Daily Observations</h3>
+                    <p>Track your kitten's adjustment progress</p>
+                    
+                    <div class="card-grid" style="margin-top: 20px;">
+                        <div class="info-card">
+                            <h4>✅ Positive Signs</h4>
+                            <ul>
+                                <li>🍽️ Eating and drinking regularly</li>
+                                <li>🚽 Using litter box consistently</li>
+                                <li>😴 Sleeping peacefully</li>
+                                <li>🎮 Showing interest in play</li>
+                                <li>👋 Approaching humans</li>
+                                <li>🔍 Curious exploration</li>
+                                <li>🎵 Purring or vocalizing</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🚨 Watch For Concerns</h4>
+                            <ul>
+                                <li>🚫 Not eating for 24+ hours</li>
+                                <li>💧 Not drinking water</li>
+                                <li>🚽 Avoiding litter box</li>
+                                <li>😰 Excessive hiding (48+ hours)</li>
+                                <li>🤢 Vomiting or diarrhea</li>
+                                <li>😵 Extreme lethargy</li>
+                                <li>🌡️ Signs of illness</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span>🎉</span>
+                    <div>
+                        <strong>Success Tip:</strong> Every small interaction is progress! Celebrate when your kitten takes treats from your hand, purrs in your presence, or shows curiosity about their new home. Building trust takes time, but the reward of a confident, loving companion is worth the patience.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track progress of socialization and handling
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const progressPercentage = Math.round((checkedBoxes.length / checkboxes.length) * 100);
+            
+            console.log(`Socialization progress: ${progressPercentage}%`);
+        }
+
+        // Add event listeners for checkboxes
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                updateProgress();
+            }
+        });
+
+        // In-memory storage for checkbox states
+        let checkboxStates = {};
+
+        // Auto-save checkbox states in memory
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                const checkboxIndex = Array.from(document.querySelectorAll('input[type="checkbox"]')).indexOf(e.target);
+                const isChecked = e.target.checked;
+                checkboxStates[checkboxIndex] = isChecked;
+            }
+        });
+
+        // Initialize progress tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>

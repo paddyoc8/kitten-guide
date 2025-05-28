@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrival Day - Kitten Journey Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Timeline Component */
+        .timeline-container {
+            background: linear-gradient(135deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--color-white);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(46, 150, 136, 0.2);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timeline-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: var(--color-white);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: var(--color-white-alpha-30);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 20px 30px;
+            position: relative;
+            background: var(--color-white-alpha-20);
+            border-radius: 15px;
+            margin: 20px 0;
+            width: 45%;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-white-alpha-30);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 55%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--color-accent-yellow);
+            border: 4px solid var(--color-white);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -50px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -50px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            background: var(--color-secondary);
+        }
+
+        .timeline-step {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: var(--color-accent-yellow);
+        }
+
+        .timeline-item:nth-child(even) .timeline-step {
+            color: var(--color-white);
+        }
+
+        .timeline-item h4 {
+            color: var(--color-white);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .timeline-item p {
+            color: var(--color-white-alpha-80);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* Info Items */
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .info-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .info-item span {
+            line-height: 1.4;
+            flex: 1;
+            color: var(--color-text);
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Navigation Buttons */
+        .nav-button {
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-medium-gray);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 10px 10px 0;
+        }
+
+        .nav-button:hover {
+            background: var(--color-medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .timeline::after {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 60px);
+                left: 60px !important;
+            }
+            
+            .timeline-item::after {
+                left: -45px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation - Journey Phases -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_arrival_day_page.html" class="journey-phase active">
+                    <span class="phase-number">1</span>
+                    <span>Arrival day</span>
+                </a>
+                <a href="2_first_few_days.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>First days</span>
+                </a>
+                <a href="3_transition_week.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Transition week</span>
+                </a>
+                <a href="4_expansion_week_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Expansion week</span>
+                </a>
+                <a href="5_freedom_week_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Freedom week</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">🏠 Arrival Day</h1>
+                <p class="page-subtitle">Step-by-step guide for your kitten's first day home</p>
+                <div>
+                    <a href="#" class="nav-button">← Planning & Prep</a>
+                    <a href="#" class="nav-button">Next: Training & Care →</a>
+                </div>
+            </div>
+
+            <!-- Before Pickup Section -->
+            <div class="form-section">
+                <h3>📋 Before Pickup</h3>
+                <p style="margin-bottom: 20px; color: var(--color-text-light);">Complete these preparations before leaving to collect your kitten</p>
+                
+                <div class="info-item">
+                    <span>• Ensure water bowl and litter box are prepared in safe room</span>
+                </div>
+                
+                <div class="info-item">
+                    <span>• Line carrier with absorbent towel or newspaper</span>
+                </div>
+                
+                <div class="info-item">
+                    <span>• Have familiar blanket or towel ready to drape over carrier</span>
+                </div>
+                
+                <div class="info-item">
+                    <span>• Secure carrier in a stable position in the car and ensure drive is smooth</span>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Important:</strong> Keep the car ride as calm and quiet as possible. Speak softly to your kitten during transport and avoid sudden movements or loud noises.
+                </div>
+            </div>
+
+            <!-- Timeline Section -->
+            <div class="timeline-container">
+                <div class="timeline-header">
+                    <h3>🕐 Your Kitten's First Day Timeline</h3>
+                    <p>Follow these steps for a successful transition to their new home</p>
+                </div>
+                
+                <div class="timeline">
+                    <!-- Step 1 -->
+                    <div class="timeline-item">
+                        <div class="timeline-step">Step 1: Arrival (First 30 minutes)</div>
+                        <h4>🏠 Safe Room Introduction</h4>
+                        <p>Bring carrier directly to safe room. Place carrier on floor and open door. Sit quietly nearby and speak in calm, soft voices. Don't reach for kitten or try to coax them out.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="timeline-item">
+                        <div class="timeline-step">Step 2: Let Them Emerge</div>
+                        <h4>🐾 Natural Exploration</h4>
+                        <p>When kitten comes out, continue speaking calmly but don't reach for them. If they approach, offer hand to sniff. If they flinch, stay still and hold back for a bit.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="timeline-item">
+                        <div class="timeline-step">Step 3: Initial Observation (15-30 minutes)</div>
+                        <h4>👀 Gentle Monitoring</h4>
+                        <p>Watch them explore their new space. You want to be there long enough for them to emerge and get a sense of you, but not so long your presence becomes stressful.</p>
+                        <p><strong>Shorten to 10-15 minutes if you see:</strong> panting, excessive vocalization, or staying completely motionless</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="timeline-item">
+                        <div class="timeline-step">Step 4: Decompression Time</div>
+                        <h4>😌 Alone Time</h4>
+                        <p>Give 2-3 hours of completely alone time. This lets them explore, find litter box and food, and start to relax without being observed.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="timeline-item">
+                        <div class="timeline-step">Step 5: Visiting</div>
+                        <h4>🍽️ Feeding Time Visits</h4>
+                        <p>Do 15-20 minute visits throughout the day allowing for decompression time in between. Coincide visits with feeding times and sit quietly in the room while kitten is eating.</p>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="timeline-item">
+                        <div class="timeline-step">Step 6: Overnight</div>
+                        <h4>🌙 First Night</h4>
+                        <p>Leave the kitten to sleep overnight in the safe room. This gives them uninterrupted time to settle and feel secure in their new environment.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="alert alert-warning">
+                <span>⚠️</span>
+                <div>
+                    <strong>Remember:</strong> Every kitten adjusts differently. Some may be confident and exploratory, while others might hide for several hours or even days. Both responses are completely normal. Patience is key!
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="#" class="nav-button">📝 Next: First Week Guide →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity - no progress tracking needed
+        console.log('Arrival Day page loaded');
+    </script>
+</body>
+</html>

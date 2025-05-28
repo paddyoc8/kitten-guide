@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transition Week - Kitten Care Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+        :root {
+            /* Primary Colors - Lighter Navy */
+            --color-primary: #5f7cae;           /* Lighter, brighter navy */
+            --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+            --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+            
+            /* Secondary Colors - Warmer Pink */
+            --color-secondary: #e8637a;         /* Warm coral-pink */
+            --color-secondary-light: #ed8296;   /* Lighter warm pink */
+            
+            /* Neutral Colors */
+            --color-white: #ffffff;
+            --color-light-gray: #f8f9fa;
+            --color-medium-gray: #e9ecef;
+            --color-dark-gray: #6c757d;
+            --color-text: #2c3e50;
+            --color-text-light: #6c757d;
+            
+            /* Status Colors - Softened Brights */
+            --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+            --color-warning: #e6941a;           /* Softened orange */
+            --color-danger: #e84545;            /* Muted coral red */
+            --color-info: #4a9de8;              /* Softened sky blue */
+            
+            /* Background Colors */
+            --bg-success: #e8f8f2;
+            --bg-warning: #fff8e1;
+            --bg-danger: #ffebee;
+            --bg-info: #e3f2fd;
+            
+            /* Border Colors */
+            --border-success: #c8f2e0;
+            --border-warning: #ffe0b2;
+            --border-danger: #ffcdd2;
+            --border-info: #bbdefb;
+            
+            /* Additional Muted Accents */
+            --color-accent-yellow: #f0d429;     /* Muted yellow */
+            --color-accent-purple: #9c3fa3;     /* Softened purple */
+            --color-accent-teal: #2e9688;       /* Muted teal */
+            --color-accent-coral: #e65a33;      /* Softened coral */
+            
+            /* Special Colors */
+            --color-muted: #8a9bb5;             /* Muted version of primary blue */
+            --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+            --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+            --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+            --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+            --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+            --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-area {
+            padding: 40px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"]:checked + * {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .alert-danger {
+            background: var(--bg-danger);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        /* Step Components */
+        .step-container {
+            background: linear-gradient(135deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--color-white);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(46, 150, 136, 0.2);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .step-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .step-item {
+            background: var(--color-white-alpha-20);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-white-alpha-30);
+            transition: transform 0.3s ease;
+        }
+
+        .step-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .step-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-content {
+            margin-left: 45px;
+            line-height: 1.7;
+        }
+
+        /* Button styles */
+        .nav-button {
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-medium-gray);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background: var(--color-medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 1.8em;
+            }
+            
+            .step-content {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .step-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Transition Week Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+
+            <div class="journey-nav">
+                <a href="1_arrival_day_page.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Arrival day</span>
+                </a>
+                <a href="2_first_few_days.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>First days</span>
+                </a>
+                <a href="3_transition_week.html" class="journey-phase active">
+                    <span class="phase-number">3</span>
+                    <span>Transition week</span>
+                </a>
+                <a href="4_expansion_week_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Expansion week</span>
+                </a>
+                <a href="5_freedom_week_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Freedom week</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">🏠 Transition Week</h1>
+                    <p class="page-subtitle">Guide your kitten's gradual expansion from safe room to full home access</p>
+                </div>
+
+                <!-- Signs of Readiness Section -->
+                <div class="form-section">
+                    <h3>✅ Signs of Readiness for Expansion</h3>
+                    <p style="margin-bottom: 20px; color: var(--color-text-light);">Look for these positive indicators before opening up new spaces:</p>
+                    
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>😸 Confident Behavior</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="exploring"> Exploring freely in safe room
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="playing"> Playing with toys regularly
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="approaching"> Approaching you readily
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="curiosity"> Showing curiosity about beyond the door
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🚽 Reliable Habits</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="litter"> Consistently using litter box
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="no-accidents"> No accidents outside box
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="eating"> Normal eating and drinking
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="regular-appetite"> Regular appetite patterns
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>😌 Calm Body Language</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="relaxed"> Relaxed posture when resting
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="grooming"> Normal grooming behavior
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="purring"> Purring during interactions
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="playful"> Displaying playful behavior
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Room Expansion Protocol -->
+                <div class="step-container">
+                    <div class="step-header">
+                        <h3>📋 Room Expansion Protocol</h3>
+                        <p>Follow these steps to gradually expand your kitten's territory</p>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-number">1</span>
+                            Extend Safe Room Time
+                        </div>
+                        <div class="step-content">
+                            <p><strong>Increase your time in the safe room to 30-45 minutes</strong>, reading or working quietly. Begin initiating play sessions and extend them to 15-20 minutes twice daily.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-number">2</span>
+                            Begin Handling Training
+                        </div>
+                        <div class="step-content">
+                            <p><strong>Start gentle handling and recall training</strong> during visits. Practice touching paws, ears, mouth. Begin carrier training by leaving it open with treats inside.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-number">3</span>
+                            First Room Expansion
+                        </div>
+                        <div class="step-content">
+                            <p><strong>Open adjacent room while monitoring</strong> but not following. Leave safe room door open as retreat. Avoid play until kitten shows confidence in new space.</p>
+                            <p><em>Duration:</em> Start with 15-30 minutes, guide back to safe room. Gradually increase time as confidence grows.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-number">4</span>
+                            Add Resources to New Space
+                        </div>
+                        <div class="step-content">
+                            <p><strong>Place water bowl and second litter box</strong> in expanded area. Transfer some old litter to new box to encourage use.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-number">5</span>
+                            Gradual Expansion
+                        </div>
+                        <div class="step-content">
+                            <p><strong>Add one new room every few days.</strong> Always maintain safe room access and continue overnight containment for several more weeks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Signs -->
+                <div class="alert alert-warning">
+                    <span>⚠️</span>
+                    <div>
+                        <strong>Scale back if you see:</strong> Hiding immediately in new spaces, refusing to eat, having accidents, or showing anxiety. Give more time in safe room before trying again.
+                    </div>
+                </div>
+
+                <!-- Progress Tracking -->
+                <div class="form-section">
+                    <h3>📊 Track Your Progress</h3>
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>🗓️ Day-by-Day Tracking</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="day1"> Day 1: Extended safe room time
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="day2"> Day 2-3: Handling training begun
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="day4"> Day 4-5: First room opened
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="day6"> Day 6-7: Resources added to new room
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox" id="week2"> Week 2: Additional rooms opened
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🎯 Success Indicators</h4>
+                            <ul>
+                                <li>✅ Kitten explores new room within 10 minutes</li>
+                                <li>✅ Uses new litter box without hesitation</li>
+                                <li>✅ Returns to safe room voluntarily</li>
+                                <li>✅ Maintains normal eating schedule</li>
+                                <li>✅ Shows playful behavior in new spaces</li>
+                                <li>✅ Sleeps peacefully in safe room at night</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips for Success -->
+                <div class="alert alert-success">
+                    <span>💡</span>
+                    <div>
+                        <strong>Pro Tip:</strong> Let your kitten set the pace. Some may be ready for expansion in 3-4 days, while others need 1-2 weeks. Watch their body language and behavior rather than following a strict timeline.
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="#" class="nav-button" onclick="window.history.back()">← Back to Planning</a>
+                    <a href="#" class="nav-button primary" onclick="saveProgress()">💾 Save Progress</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // In-memory storage for checkbox states
+        let progressData = {};
+
+        function saveProgress() {
+            // Collect all checkbox states
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const progress = {};
+            
+            checkboxes.forEach(checkbox => {
+                progress[checkbox.id] = checkbox.checked;
+            });
+            
+            // Store in memory
+            progressData = progress;
+            
+            // Calculate completion percentage
+            const totalChecked = Object.values(progress).filter(Boolean).length;
+            const totalCheckboxes = Object.keys(progress).length;
+            const percentage = Math.round((totalChecked / totalCheckboxes) * 100);
+            
+            // Show success message
+            alert(`Transition Week progress saved! 🐱\n\nCompletion: ${percentage}%\n\nNote: Progress is saved for this session. For permanent tracking, note your progress in a journal or document.`);
+        }
+
+        // Auto-save checkbox states to memory during session
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                progressData[e.target.id] = e.target.checked;
+            }
+        });
+
+        // Load saved checkbox states on page load (from memory)
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            checkboxes.forEach(checkbox => {
+                if (progressData[checkbox.id] === true) {
+                    checkbox.checked = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
