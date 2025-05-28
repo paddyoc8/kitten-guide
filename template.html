@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitten Planning Module</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area - Now lighter with white background */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation - Now with primary navy as accent */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, var(--color-white) 0%, var(--color-light-gray) 100%);
+            border-right: 2px solid var(--color-medium-gray);
+            padding: 30px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .sidebar-header {
+            padding: 0 30px 20px;
+            border-bottom: 2px solid var(--color-medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--color-primary);
+            font-size: 1.3em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .sidebar-subtitle {
+            color: var(--color-text-light);
+            font-size: 0.9em;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            padding: 10px 15px;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, transparent 0%, rgba(232, 99, 122, 0.1) 50%, transparent 100%);
+            border-radius: 15px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 2px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-color: var(--color-primary-light);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: var(--color-white);
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(95, 124, 174, 0.3);
+        }
+
+        .sidebar-item .icon {
+            font-size: 1.2em;
+            margin-right: 12px;
+            min-width: 24px;
+        }
+
+        .sidebar-item .status-indicator {
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-warning);
+            border: 2px solid var(--color-white);
+        }
+
+        .sidebar-item .status-indicator.complete {
+            background: var(--color-success);
+        }
+
+        /* Content Area - Brighter with accent colors */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+            background: var(--color-white);
+        }
+
+        .page {
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .page-nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-button {
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-medium-gray);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+        }
+
+        .nav-button:hover {
+            background: var(--color-medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        /* Form Components - More colorful and engaging */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 12px;
+            border: 2px solid var(--color-medium-gray);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: var(--color-white);
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 3px rgba(232, 99, 122, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Timeline Component - More vibrant */
+        .timeline-container {
+            background: linear-gradient(135deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: var(--color-white);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(46, 150, 136, 0.2);
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .timeline-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: var(--color-white-alpha-30);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 20px 40px;
+            position: relative;
+            background: var(--color-white-alpha-20);
+            border-radius: 15px;
+            margin: 20px 0;
+            width: 45%;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--color-white-alpha-30);
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 55%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--color-accent-yellow);
+            border: 4px solid var(--color-white);
+            top: 25px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -50px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -50px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            background: var(--color-secondary);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: var(--color-accent-yellow);
+        }
+
+        /* Card Components - More colorful */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Checklist Items - More engaging */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"]:checked + * {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        /* Progress Components - More vibrant */
+        .progress-section {
+            background: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-primary) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(156, 63, 163, 0.2);
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .progress-ring-circle {
+            fill: none;
+            stroke: var(--color-white-alpha-30);
+            stroke-width: 8;
+        }
+
+        .progress-ring-progress {
+            fill: none;
+            stroke: var(--color-accent-yellow);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dasharray 0.5s ease;
+        }
+
+        /* Alert Components - More colorful */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: none;
+                border-right: none;
+                border-bottom: 2px solid var(--color-medium-gray);
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::after {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 60px);
+                left: 60px !important;
+            }
+            
+            .timeline-item::after {
+                left: -45px !important;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Additional engaging elements */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-header {
+            position: relative;
+        }
+
+        /* Animated gradient backgrounds for special sections */
+        .timeline-container, .progress-section {
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation - Journey Phases -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <button class="back-to-main" onclick="alert('This would navigate to the main dashboard')">
+                    ← Main Dashboard
+                </button>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="#" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Pre-Adoption</span>
+                </a>
+                <a href="#" class="journey-phase active">
+                    <span class="phase-number">2</span>
+                    <span>Planning & Prep</span>
+                </a>
+                <a href="#" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>First Week</span>
+                </a>
+                <a href="#" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Training & Care</span>
+                </a>
+                <a href="#" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Health & Wellness</span>
+                </a>
+                <a href="#" class="journey-phase">
+                    <span class="phase-number">6</span>
+                    <span>Long-term Care</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Sidebar Navigation -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Planning & Preparation</h2>
+                    <p class="sidebar-subtitle">Get ready for your kitten's arrival</p>
+                </div>
+                
+                <div class="sidebar-nav">
+                    <div class="nav-section">
+                        <div class="nav-section-title">Essential Planning</div>
+                        <a href="#" class="sidebar-item active" onclick="showPage('timeline')">
+                            <span class="icon">📅</span>
+                            <span>Timeline & Milestones</span>
+                            <span class="status-indicator complete" id="timelineStatus"></span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showPage('profile')">
+                            <span class="icon">🐱</span>
+                            <span>Kitten Profile</span>
+                            <span class="status-indicator" id="profileStatus"></span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showPage('home-prep')">
+                            <span class="icon">🏠</span>
+                            <span>Home Preparation</span>
+                            <span class="status-indicator" id="homeStatus"></span>
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Care Setup</div>
+                        <a href="#" class="sidebar-item" onclick="showPage('vet-care')">
+                            <span class="icon">🏥</span>
+                            <span>Veterinary Care</span>
+                            <span class="status-indicator" id="vetStatus"></span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showPage('schedule')">
+                            <span class="icon">⏰</span>
+                            <span>Daily Schedule</span>
+                            <span class="status-indicator" id="scheduleStatus"></span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showPage('introduction')">
+                            <span class="icon">👥</span>
+                            <span>Family Introductions</span>
+                            <span class="status-indicator" id="introStatus"></span>
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Safety & Tracking</div>
+                        <a href="#" class="sidebar-item" onclick="showPage('emergency')">
+                            <span class="icon">🚨</span>
+                            <span>Emergency Planning</span>
+                            <span class="status-indicator" id="emergencyStatus"></span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showPage('progress')">
+                            <span class="icon">📊</span>
+                            <span>Progress Overview</span>
+                            <span class="status-indicator complete"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Timeline Page -->
+                <div id="timeline" class="page active">
+                    <div class="page-header">
+                        <h1 class="page-title">📅 Timeline & Milestones</h1>
+                        <p class="page-subtitle">Create a personalized timeline for your kitten's arrival</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('profile')">Next: Kitten Profile →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📝 Key Dates</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adoptionDate">🎉 Adoption/Pickup Date:</label>
+                                <input type="date" id="adoptionDate" onchange="updateTimeline()">
+                            </div>
+                            <div class="form-group">
+                                <label for="prepStartDate">🛍️ Start Preparation Date:</label>
+                                <input type="date" id="prepStartDate" onchange="updateTimeline()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vetDate">🏥 First Vet Visit:</label>
+                                <input type="date" id="vetDate" onchange="updateTimeline()">
+                            </div>
+                            <div class="form-group">
+                                <label for="vaccinationDate">💉 Next Vaccination Due:</label>
+                                <input type="date" id="vaccinationDate" onchange="updateTimeline()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-container">
+                        <div class="timeline-header">
+                            <h3>🗓️ Your Personalized Timeline</h3>
+                            <p>Based on your planned adoption date</p>
+                        </div>
+                        <div class="timeline" id="timelineDisplay">
+                            <div class="timeline-item">
+                                <div class="timeline-date">2 weeks before</div>
+                                <h4>🛒 Begin Shopping</h4>
+                                <p>Start purchasing essential supplies and setting up your home</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">1 week before</div>
+                                <h4>🏠 Final Preparations</h4>
+                                <p>Cat-proof your home and set up the safe room</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">Adoption Day</div>
+                                <h4>🎉 Welcome Home!</h4>
+                                <p>Bring your new kitten home and let them settle in</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">Within 3 days</div>
+                                <h4>🏥 First Vet Visit</h4>
+                                <p>Schedule and attend the initial health checkup</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kitten Profile Page -->
+                <div id="profile" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">🐱 Kitten Profile</h1>
+                        <p class="page-subtitle">Record all the important details about your new companion</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('timeline')">← Timeline</button>
+                            <button class="nav-button" onclick="showPage('home-prep')">Next: Home Prep →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📋 Basic Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="kittenName">🏷️ Name:</label>
+                                <input type="text" id="kittenName" placeholder="What will you call your kitten?">
+                            </div>
+                            <div class="form-group">
+                                <label for="kittenGender">⚧ Gender:</label>
+                                <select id="kittenGender">
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="unknown">Unknown</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="kittenAge">📅 Age/Birth Date:</label>
+                                <input type="date" id="kittenAge">
+                            </div>
+                            <div class="form-group">
+                                <label for="kittenWeight">⚖️ Current Weight:</label>
+                                <input type="text" id="kittenWeight" placeholder="e.g., 2.5 lbs">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🧬 Breed & Appearance</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="kittenBreed">🐾 Breed:</label>
+                                <input type="text" id="kittenBreed" placeholder="Mixed, Persian, Maine Coon, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label for="kittenColor">🎨 Color/Pattern:</label>
+                                <input type="text" id="kittenColor" placeholder="Tabby, Calico, Black, etc.">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eyeColor">👁️ Eye Color:</label>
+                                <input type="text" id="eyeColor" placeholder="Blue, Green, Amber, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label for="furLength">✂️ Fur Length:</label>
+                                <select id="furLength">
+                                    <option value="">Select fur length</option>
+                                    <option value="short">Short</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="long">Long</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🏥 Health Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vaccinationStatus">💉 Vaccination Status:</label>
+                                <textarea id="vaccinationStatus" placeholder="List any vaccines already received and dates..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="healthConditions">🩺 Known Health Issues:</label>
+                                <textarea id="healthConditions" placeholder="Any known allergies, conditions, or special needs..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>😸 Personality & Behavior</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="personality">🎭 Personality Traits:</label>
+                                <textarea id="personality" placeholder="Playful, shy, curious, cuddly, etc..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialNeeds">⚠️ Special Considerations:</label>
+                                <textarea id="specialNeeds" placeholder="Any behavioral notes, fears, preferences..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="nav-button primary" onclick="saveProfile()">💾 Save Profile</button>
+                </div>
+
+                <!-- Home Preparation Page -->
+                <div id="home-prep" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">🏠 Home Preparation</h1>
+                        <p class="page-subtitle">Make your home safe and welcoming for your new kitten</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('profile')">← Kitten Profile</button>
+                            <button class="nav-button" onclick="showPage('vet-care')">Next: Vet Care →</button>
+                        </div>
+                    </div>
+
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>🚫 Cat-Proofing Checklist</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Remove toxic plants (lilies, azaleas, etc.)
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Secure loose electrical wires
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Remove small objects (rubber bands, etc.)
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Install cabinet locks if needed
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Check for holes/gaps kitten could get stuck in
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Secure balcony/windows with screens
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🛏️ Safe Room Setup</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Choose quiet room away from main traffic
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Place food and water bowls
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Set up litter box (away from food)
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Add comfortable bedding/hiding spots
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Include scratching post
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Add some toys for stimulation
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🏠 Your Home Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="homeType">🏡 Home Type:</label>
+                                <select id="homeType">
+                                    <option value="">Select home type</option>
+                                    <option value="apartment">Apartment</option>
+                                    <option value="house">House</option>
+                                    <option value="condo">Condo</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="safeRoom">🚪 Designated Safe Room:</label>
+                                <input type="text" id="safeRoom" placeholder="Bedroom, office, etc.">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hazards">⚠️ Potential Hazards Identified:</label>
+                                <textarea id="hazards" placeholder="List any specific hazards in your home..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="modifications">🔧 Home Modifications Needed:</label>
+                                <textarea id="modifications" placeholder="Any changes you need to make..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vet Care Page -->
+                <div id="vet-care" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">🏥 Veterinary Care Plan</h1>
+                        <p class="page-subtitle">Organize your kitten's healthcare needs</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('home-prep')">← Home Prep</button>
+                            <button class="nav-button" onclick="showPage('schedule')">Next: Daily Schedule →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>👩‍⚕️ Veterinarian Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vetName">🏥 Clinic Name:</label>
+                                <input type="text" id="vetName" placeholder="Your chosen veterinary clinic">
+                            </div>
+                            <div class="form-group">
+                                <label for="vetPhone">📞 Phone Number:</label>
+                                <input type="tel" id="vetPhone" placeholder="(555) 123-4567">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="vetAddress">📍 Address:</label>
+                                <textarea id="vetAddress" placeholder="Full clinic address..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="emergencyVet">🚨 Emergency Vet Info:</label>
+                                <textarea id="emergencyVet" placeholder="After-hours emergency clinic details..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span>ℹ️</span>
+                        <div>
+                            <strong>First Visit Reminder:</strong> Schedule your kitten's first vet visit within 3-5 days of adoption, even if they seem healthy. This establishes care and catches any issues early.
+                        </div>
+                    </div>
+
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>📋 First Visit Checklist</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Bring adoption papers/medical records
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> List any concerns or questions
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Bring stool sample if possible
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Discuss vaccination schedule
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Ask about spay/neuter timing
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> Discuss diet and feeding schedule
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>💉 Typical Vaccination Schedule</h4>
+                            <ul>
+                                <li>📅 6-8 weeks: First FVRCP</li>
+                                <li>📅 10-12 weeks: Second FVRCP</li>
+                                <li>📅 14-16 weeks: Third FVRCP + Rabies</li>
+                                <li>📅 1 year: Booster shots</li>
+                                <li>📅 Annual: Yearly check-ups</li>
+                                <li>⚠️ Schedule may vary based on kitten's health and vet recommendations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📝 Questions for Your Vet</h3>
+                        <div class="form-group">
+                            <label for="vetQuestions">❓ Questions to Ask:</label>
+                            <textarea id="vetQuestions" placeholder="Write down any questions or concerns you want to discuss with your vet..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Schedule Page -->
+                <div id="schedule" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">⏰ Daily Schedule & Routine</h1>
+                        <p class="page-subtitle">Establish a healthy routine for your kitten</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('vet-care')">← Vet Care</button>
+                            <button class="nav-button" onclick="showPage('introduction')">Next: Introductions →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🍽️ Feeding Schedule</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="feedingTimes">⏰ Meal Times:</label>
+                                <textarea id="feedingTimes" placeholder="e.g., 7:00 AM, 12:00 PM, 6:00 PM..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="foodType">🥫 Food Type & Amount:</label>
+                                <textarea id="foodType" placeholder="Brand, wet/dry food amounts per meal..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>🌅 Morning Routine</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🍽️ First meal of the day
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🧹 Clean litter box
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🎮 Interactive play session
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🫂 Gentle socializing time
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🌆 Evening Routine</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🍽️ Final meal of the day
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🎯 Energy-burning play time
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> ✂️ Grooming session
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🛏️ Prepare sleeping area
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span>💡</span>
+                        <div>
+                            <strong>Routine Benefits:</strong> Consistent schedules help kittens feel secure and make house training easier. Adjust timing to fit your lifestyle, but try to keep meal times consistent.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Introduction Plan Page -->
+                <div id="introduction" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">👥 Family & Pet Introductions</h1>
+                        <p class="page-subtitle">Plan safe introductions to family members and other pets</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('schedule')">← Daily Schedule</button>
+                            <button class="nav-button" onclick="showPage('emergency')">Next: Emergency Plan →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>👨‍👩‍👧‍👦 Household Members</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adults">👨‍👩 Adults in Home:</label>
+                                <textarea id="adults" placeholder="List adult family members and any relevant information..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="children">👧👦 Children in Home:</label>
+                                <textarea id="children" placeholder="Ages and experience with pets..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="allergies">🤧 Family Allergies:</label>
+                                <textarea id="allergies" placeholder="Any cat allergies or sensitivities..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="experience">📚 Pet Experience:</label>
+                                <textarea id="experience" placeholder="Family's experience with cats/pets..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>🐕🐱 Other Pets</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="otherPets">🦮 Current Pets:</label>
+                                <textarea id="otherPets" placeholder="List other pets, their ages, breeds, and temperaments..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="petPrep">🎯 Pet Introduction Plan:</label>
+                                <textarea id="petPrep" placeholder="How will you introduce the kitten to existing pets?..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div>
+                            <strong>Introduction Safety:</strong> Always supervise initial meetings between your kitten and other pets or young children. Go slow and watch for stress signals from all animals involved.
+                        </div>
+                    </div>
+
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>🐕 Introducing to Dogs</h4>
+                            <ul>
+                                <li>🏠 Keep kitten in safe room initially</li>
+                                <li>👃 Let them smell each other's scent first</li>
+                                <li>👀 Visual contact through baby gate</li>
+                                <li>🍽️ Feed on opposite sides of door</li>
+                                <li>⏰ Short, supervised meetings</li>
+                                <li>🎁 Reward calm behavior with treats</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🐱 Introducing to Other Cats</h4>
+                            <ul>
+                                <li>🚪 Separate rooms for 1-2 weeks</li>
+                                <li>🔄 Switch sleeping blankets daily</li>
+                                <li>🍽️ Feed near the door (but separated)</li>
+                                <li>🎮 Interactive play sessions</li>
+                                <li>👁️ Brief visual contact sessions</li>
+                                <li>⚖️ Gradual increase in time together</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Plan Page -->
+                <div id="emergency" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">🚨 Emergency Preparedness</h1>
+                        <p class="page-subtitle">Be prepared for any health or safety emergencies</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('introduction')">← Introductions</button>
+                            <button class="nav-button" onclick="showPage('progress')">Next: Progress Overview →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📞 Emergency Contacts</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="emergencyVetPhone">🏥 Emergency Vet Clinic:</label>
+                                <input type="tel" id="emergencyVetPhone" placeholder="24-hour emergency clinic phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="poisonControl">☠️ Pet Poison Control:</label>
+                                <input type="tel" id="poisonControl" value="(888) 426-4435" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="backupCaregiver">👨‍👩‍👧‍👦 Backup Caregiver:</label>
+                                <input type="text" id="backupCaregiver" placeholder="Friend/family who can help in emergency">
+                            </div>
+                            <div class="form-group">
+                                <label for="caregiverPhone">📱 Caregiver Phone:</label>
+                                <input type="tel" id="caregiverPhone" placeholder="Backup caregiver contact">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>🏥 Emergency Kit Essentials</h4>
+                            <ul>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🩹 First aid supplies
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🌡️ Digital thermometer (normal: 100.4-102.5°F)
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 💊 Any prescribed medications
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🧤 Disposable gloves
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 📋 Emergency contact list
+                                </li>
+                                <li class="checklist-item">
+                                    <input type="checkbox"> 🚗 Secure cat carrier
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>⚠️ Emergency Warning Signs</h4>
+                            <ul>
+                                <li>🚫 Not eating for 24+ hours</li>
+                                <li>💨 Difficulty breathing</li>
+                                <li>🤢 Repeated vomiting</li>
+                                <li>🩸 Blood in stool or urine</li>
+                                <li>😵 Lethargy or unresponsiveness</li>
+                                <li>🌡️ Fever over 103°F</li>
+                                <li>💧 Straining to urinate</li>
+                                <li>🦴 Suspected trauma/injury</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <span>🚨</span>
+                        <div>
+                            <strong>When in Doubt:</strong> If you're unsure whether something is an emergency, call your vet or emergency clinic. It's always better to be safe when it comes to your kitten's health.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tracking Page -->
+                <div id="progress" class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">📊 Planning Progress</h1>
+                        <p class="page-subtitle">Track your preparation progress across all areas</p>
+                        <div class="page-nav">
+                            <button class="nav-button" onclick="showPage('emergency')">← Emergency Plan</button>
+                            <button class="nav-button primary" onclick="saveAllData()">💾 Save All Data</button>
+                        </div>
+                    </div>
+
+                    <div class="progress-section">
+                        <h3>🎯 Overall Preparation Progress</h3>
+                        <div class="progress-ring">
+                            <svg width="120" height="120">
+                                <circle class="progress-ring-circle" cx="60" cy="60" r="50"></circle>
+                                <circle class="progress-ring-progress" cx="60" cy="60" r="50" id="progressCircle"></circle>
+                            </svg>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5em; font-weight: bold;" id="progressText">0%</div>
+                        </div>
+                        <p>Complete all sections to be fully prepared for your kitten's arrival!</p>
+                    </div>
+
+                    <div class="card-grid">
+                        <div class="info-card">
+                            <h4>📅 Timeline Planning</h4>
+                            <div id="timelineProgress">
+                                <p>Status: <span style="color: #dc3545;">Incomplete</span></p>
+                                <small>Set your adoption date and key milestones</small>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🐱 Kitten Profile</h4>
+                            <div id="profileProgress">
+                                <p>Status: <span style="color: #dc3545;">Incomplete</span></p>
+                                <small>Record your kitten's details and health info</small>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🏠 Home Preparation</h4>
+                            <div id="homeProgress">
+                                <p>Status: <span style="color: #dc3545;">Incomplete</span></p>
+                                <small>Cat-proof your home and set up safe spaces</small>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>🏥 Vet Care Plan</h4>
+                            <div id="vetProgress">
+                                <p>Status: <span style="color: #dc3545;">Incomplete</span></p>
+                                <small>Choose vet and plan first visit</small>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>⏰ Daily Schedule</h4>
+                            <div id="scheduleProgress">
+                                <p>Status: <span style="color: #dc3545;">Incomplete</span></p>
+                                <small>Establish feeding and care routines</small>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <h4>👥 Introduction Plan</h4>
+                            <div id="introProgress">
+                                <p>Status: <span style="color: #dc3545;">Incomplete</span></p>
+                                <small>Plan family and pet introductions</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success" style="display: none;" id="completionMessage">
+                        <span>🎉</span>
+                        <div>
+                            <strong>Congratulations!</strong> You've completed all planning sections. You're ready to welcome your new kitten home!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store all form data
+        let planningData = {};
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Add active class to corresponding sidebar item
+            document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
+            
+            // Update progress when switching pages
+            updateProgress();
+        }
+
+        function updateTimeline() {
+            const adoptionDate = document.getElementById('adoptionDate').value;
+            if (!adoptionDate) return;
+            
+            const adoption = new Date(adoptionDate);
+            const timeline = document.getElementById('timelineDisplay');
+            
+            // Calculate timeline dates
+            const twoWeeksBefore = new Date(adoption.getTime() - (14 * 24 * 60 * 60 * 1000));
+            const oneWeekBefore = new Date(adoption.getTime() - (7 * 24 * 60 * 60 * 1000));
+            const threeDaysAfter = new Date(adoption.getTime() + (3 * 24 * 60 * 60 * 1000));
+            
+            timeline.innerHTML = `
+                <div class="timeline-item">
+                    <div class="timeline-date">${twoWeeksBefore.toLocaleDateString()}</div>
+                    <h4>🛒 Begin Shopping</h4>
+                    <p>Start purchasing essential supplies and setting up your home</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">${oneWeekBefore.toLocaleDateString()}</div>
+                    <h4>🏠 Final Preparations</h4>
+                    <p>Cat-proof your home and set up the safe room</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">${adoption.toLocaleDateString()}</div>
+                    <h4>🎉 Welcome Home!</h4>
+                    <p>Bring your new kitten home and let them settle in</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">${threeDaysAfter.toLocaleDateString()}</div>
+                    <h4>🏥 First Vet Visit</h4>
+                    <p>Schedule and attend the initial health checkup</p>
+                </div>
+            `;
+        }
+
+        function saveProfile() {
+            // Collect profile data
+            const profileData = {
+                name: document.getElementById('kittenName').value,
+                gender: document.getElementById('kittenGender').value,
+                age: document.getElementById('kittenAge').value,
+                weight: document.getElementById('kittenWeight').value,
+                breed: document.getElementById('kittenBreed').value,
+                color: document.getElementById('kittenColor').value,
+                eyeColor: document.getElementById('eyeColor').value,
+                furLength: document.getElementById('furLength').value,
+                vaccinations: document.getElementById('vaccinationStatus').value,
+                health: document.getElementById('healthConditions').value,
+                personality: document.getElementById('personality').value,
+                specialNeeds: document.getElementById('specialNeeds').value
+            };
+            
+            planningData.profile = profileData;
+            
+            // Show success message
+            alert('Profile saved successfully! 🐱');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            // Calculate completion for each section
+            const sections = {
+                timeline: checkTimelineCompletion(),
+                profile: checkProfileCompletion(),
+                home: checkHomeCompletion(),
+                vet: checkVetCompletion(),
+                schedule: checkScheduleCompletion(),
+                introduction: checkIntroCompletion()
+            };
+            
+            // Update sidebar status indicators
+            Object.keys(sections).forEach(section => {
+                const statusElement = document.getElementById(section + 'Status');
+                if (statusElement) {
+                    statusElement.classList.toggle('complete', sections[section]);
+                }
+            });
+            
+            // Update individual section status in progress page
+            Object.keys(sections).forEach(section => {
+                const element = document.getElementById(section + 'Progress');
+                if (element) {
+                    const status = sections[section] ? 
+                        '<span style="color: #4a9b6e;">Complete</span>' : 
+                        '<span style="color: #e84545;">Incomplete</span>';
+                    element.querySelector('p').innerHTML = `Status: ${status}`;
+                }
+            });
+            
+            // Calculate overall progress
+            const completed = Object.values(sections).filter(Boolean).length;
+            const total = Object.keys(sections).length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            // Update progress ring
+            const circle = document.getElementById('progressCircle');
+            if (circle) {
+                const radius = 50;
+                const circumference = 2 * Math.PI * radius;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                circle.style.strokeDasharray = circumference;
+                circle.style.strokeDashoffset = offset;
+                
+                document.getElementById('progressText').textContent = percentage + '%';
+            }
+            
+            // Show completion message if 100%
+            const completionMsg = document.getElementById('completionMessage');
+            if (completionMsg && percentage === 100) {
+                completionMsg.style.display = 'block';
+            }
+        }
+
+        function checkTimelineCompletion() {
+            return document.getElementById('adoptionDate').value !== '';
+        }
+
+        function checkProfileCompletion() {
+            const required = ['kittenName', 'kittenGender', 'kittenAge'];
+            return required.every(id => document.getElementById(id).value !== '');
+        }
+
+        function checkHomeCompletion() {
+            const checkboxes = document.querySelectorAll('#home-prep .checklist-item input[type="checkbox"]');
+            const checked = Array.from(checkboxes).filter(cb => cb.checked);
+            return checked.length >= checkboxes.length * 0.7; // 70% completion
+        }
+
+        function checkVetCompletion() {
+            return document.getElementById('vetName').value !== '' && 
+                   document.getElementById('vetPhone').value !== '';
+        }
+
+        function checkScheduleCompletion() {
+            return document.getElementById('feedingTimes').value !== '';
+        }
+
+        function checkIntroCompletion() {
+            return document.getElementById('adults').value !== '' || 
+                   document.getElementById('children').value !== '' ||
+                   document.getElementById('otherPets').value !== '';
+        }
+
+        function saveAllData() {
+            // Collect all form data
+            const allInputs = document.querySelectorAll('input, select, textarea');
+            const data = {};
+            
+            allInputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    data[input.id || input.name] = input.checked;
+                } else {
+                    data[input.id || input.name] = input.value;
+                }
+            });
+            
+            planningData = { ...planningData, ...data };
+            
+            // Show success message with data summary
+            const completedSections = Object.values({
+                timeline: checkTimelineCompletion(),
+                profile: checkProfileCompletion(),
+                home: checkHomeCompletion(),
+                vet: checkVetCompletion(),
+                schedule: checkScheduleCompletion(),
+                introduction: checkIntroCompletion()
+            }).filter(Boolean).length;
+            
+            alert(`Planning data saved in session! 💾\n\nCompleted sections: ${completedSections}/6\n\nNote: Data will be saved during this session. For permanent storage, copy your information to a document.`);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial progress update
+            updateProgress();
+            
+            // Set default values for some fields
+            document.getElementById('poisonControl').value = '(888) 426-4435';
+        });
+
+        // Auto-save form data as user types
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('input, select, textarea')) {
+                updateProgress();
+            }
+        });
+
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                updateProgress();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Proofing the House - Safety Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette as template
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           
+    --color-primary-dark: #4e6b9c;      
+    --color-primary-light: #7090c0;     
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         
+    --color-secondary-light: #ed8296;   
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           
+    --color-warning: #e6941a;           
+    --color-danger: #e84545;            
+    --color-info: #4a9de8;              
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     
+    --color-accent-purple: #9c3fa3;     
+    --color-accent-teal: #2e9688;       
+    --color-accent-coral: #e65a33;      
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             
+    --color-overlay: rgba(95, 124, 174, 0.1);      
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); 
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-area {
+            padding: 40px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-primary) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(156, 63, 163, 0.2);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .progress-ring-circle {
+            fill: none;
+            stroke: var(--color-white-alpha-30);
+            stroke-width: 8;
+        }
+
+        .progress-ring-progress {
+            fill: none;
+            stroke: var(--color-accent-yellow);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dasharray 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section:nth-child(4n) {
+            border-left-color: var(--color-warning);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item.completed {
+            background: var(--bg-success);
+            border-left-color: var(--color-success);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + .checklist-item-text {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-danger {
+            background: var(--bg-danger);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .alert-icon {
+            font-size: 1.2em;
+            margin-top: 2px;
+        }
+
+        /* Card Components */
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .emergency-link {
+            color: var(--color-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .emergency-link:hover {
+            color: var(--color-secondary-light);
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .nav-button {
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-medium-gray);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            margin: 10px 5px;
+        }
+
+        .nav-button:hover {
+            background: var(--color-medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 1.8em;
+            }
+            
+            .checklist-item {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .checklist-item input[type="checkbox"] {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <button class="back-to-main" onclick="alert('This would navigate back to the main planning module')">
+                    ← Back to Planning
+                </button>
+            </div>
+
+            <div class="journey-nav">
+                <a href="1_questions_before_adopting.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Before adoption</span>
+                </a>
+                <a href="2_finding_vet_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Finding a vet</span>
+                </a>
+                <a href="3_pet_insurance_research.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Pet insurance</span>
+                </a>
+                <a href="4_cat_proofing_page.html" class="journey-phase active">
+                    <span class="phase-number">4</span>
+                    <span>Cat proofing</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="content-area">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">🛡️ Home Cat-Proofing Guide</h1>
+                    <p class="page-subtitle">Room-by-room safety checklist to protect your curious kitten</p>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <h3>🎯 Cat-Proofing Progress</h3>
+                    <div class="progress-ring">
+                        <svg width="120" height="120">
+                            <circle class="progress-ring-circle" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-ring-progress" cx="60" cy="60" r="50" id="progressCircle"></circle>
+                        </svg>
+                        <div class="progress-text" id="progressText">0%</div>
+                    </div>
+                    <p>Complete all safety checks to ensure your home is kitten-ready!</p>
+                </div>
+
+                <!-- General House Safety -->
+                <div class="form-section">
+                    <h3>🏠 General House Safety</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="electrical-wires" onchange="updateProgress()">
+                        <div class="checklist-item-text">Secure loose electrical wires or cover with cord protectors</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="small-objects" onchange="updateProgress()">
+                        <div class="checklist-item-text">Remove or secure small objects that could be swallowed</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="stuck-spaces" onchange="updateProgress()">
+                        <div class="checklist-item-text">Check for spaces where kitten could get stuck (behind appliances, etc.)</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cabinet-locks" onchange="updateProgress()">
+                        <div class="checklist-item-text">Install child locks on cabinets with cleaning supplies</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="breakable-items" onchange="updateProgress()">
+                        <div class="checklist-item-text">Secure breakable items or move to high shelves</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="hiding-spaces" onchange="updateProgress()">
+                        <div class="checklist-item-text">Block off inaccessible spaces where a kitten may choose to hide</div>
+                    </div>
+                </div>
+
+                <!-- Toxic Plants -->
+                <div class="form-section">
+                    <h3>🌿 Toxic Plants to Remove</h3>
+                    
+                    <div class="alert alert-danger">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <strong>Critical Warning:</strong> These plants are extremely toxic to cats and can be fatal if ingested. Remove them completely from your home.
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="lilies" onchange="updateProgress()">
+                        <div class="checklist-item-text">Lilies (all types - extremely toxic to cats)</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="azaleas" onchange="updateProgress()">
+                        <div class="checklist-item-text">Azaleas and rhododendrons</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="tulips" onchange="updateProgress()">
+                        <div class="checklist-item-text">Tulips and daffodils</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="poinsettias" onchange="updateProgress()">
+                        <div class="checklist-item-text">Poinsettias and oleander</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sago-palms" onchange="updateProgress()">
+                        <div class="checklist-item-text">Sago palms and cyclamen</div>
+                    </div>
+                </div>
+
+                <!-- Kitchen Safety -->
+                <div class="form-section">
+                    <h3>🍽️ Kitchen Safety</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sharp-knives" onchange="updateProgress()">
+                        <div class="checklist-item-text">Store sharp knives in secured drawers</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="toxic-foods" onchange="updateProgress()">
+                        <div class="checklist-item-text">Keep toxic foods stored securely (chocolate, onions, garlic)</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="secure-bins" onchange="updateProgress()">
+                        <div class="checklist-item-text">Secure bins with tight-fitting lids</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="appliance-gaps" onchange="updateProgress()">
+                        <div class="checklist-item-text">Check for gaps behind/under appliances</div>
+                    </div>
+                </div>
+
+                <!-- Bathroom Safety -->
+                <div class="form-section">
+                    <h3>🚿 Bathroom Safety</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="toilet-lids" onchange="updateProgress()">
+                        <div class="checklist-item-text">Keep toilet lids closed (drowning risk)</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="medications" onchange="updateProgress()">
+                        <div class="checklist-item-text">Store medications in secured cabinets</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="small-items" onchange="updateProgress()">
+                        <div class="checklist-item-text">Remove or secure hair ties, cotton buds, razors</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="cleaning-products" onchange="updateProgress()">
+                        <div class="checklist-item-text">Check for toxic cleaning products</div>
+                    </div>
+                </div>
+
+                <!-- Emergency Information -->
+                <div class="info-card">
+                    <h4>🚨 Emergency Information</h4>
+                    <p><strong>Emergency Numbers:</strong> Keep your vet's number and the nearest 24-hour emergency clinic number easily accessible.</p>
+                    <p style="margin-top: 10px;"><strong>Pet First Aid:</strong> <a href="https://www.pdsa.org.uk/pet-help-and-advice/looking-after-your-pet/all-pets/first-aid-for-pets" target="_blank" class="emergency-link">https://www.pdsa.org.uk/pet-help-and-advice/looking-after-your-pet/all-pets/first-aid-for-pets</a></p>
+                </div>
+
+                <!-- Completion Alert -->
+                <div class="alert alert-success" style="display: none;" id="completionAlert">
+                    <span class="alert-icon">🎉</span>
+                    <div>
+                        <strong>Congratulations!</strong> You've completed all cat-proofing safety checks. Your home is now safe and ready for your new kitten!
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="nav-button" onclick="resetProgress()">🔄 Reset Checklist</button>
+                    <button class="nav-button primary" onclick="printChecklist()">🖨️ Print Checklist</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateProgress() {
+            // Get all checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            // Calculate progress
+            const total = checkboxes.length;
+            const completed = checkedBoxes.length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            // Update progress ring
+            const circle = document.getElementById('progressCircle');
+            const progressText = document.getElementById('progressText');
+            
+            if (circle && progressText) {
+                const radius = 50;
+                const circumference = 2 * Math.PI * radius;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                circle.style.strokeDasharray = circumference;
+                circle.style.strokeDashoffset = offset;
+                
+                progressText.textContent = percentage + '%';
+            }
+            
+            // Update individual checklist items
+            checkboxes.forEach(checkbox => {
+                const item = checkbox.closest('.checklist-item');
+                if (checkbox.checked) {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+            });
+            
+            // Show completion alert if 100%
+            const completionAlert = document.getElementById('completionAlert');
+            if (percentage === 100) {
+                completionAlert.style.display = 'flex';
+                // Add celebration effect
+                document.body.style.animation = 'celebration 0.6s ease';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 600);
+            } else {
+                completionAlert.style.display = 'none';
+            }
+        }
+
+        function resetProgress() {
+            // Uncheck all checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Update progress
+            updateProgress();
+        }
+
+        function printChecklist() {
+            // Create a printable version
+            const printWindow = window.open('', '_blank');
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            
+            let printContent = `
+                <html>
+                <head>
+                    <title>Cat Proofing Checklist</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h1 { color: #5f7cae; border-bottom: 2px solid #e8637a; padding-bottom: 10px; }
+                        h2 { color: #5f7cae; margin-top: 25px; }
+                        .section { margin-bottom: 20px; }
+                        .checklist-item { margin: 8px 0; padding: 5px; }
+                        .completed { background-color: #e8f8f2; text-decoration: line-through; }
+                        .checkbox { margin-right: 10px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>🏠 Cat Proofing the House - Safety Checklist</h1>
+            `;
+            
+            // Add each section
+            const sections = [
+                { title: '🏠 General House Safety', items: ['electrical-wires', 'small-objects', 'stuck-spaces', 'cabinet-locks', 'breakable-items', 'hiding-spaces'] },
+                { title: '🌿 Toxic Plants to Remove', items: ['lilies', 'azaleas', 'tulips', 'poinsettias', 'sago-palms'] },
+                { title: '🍽️ Kitchen Safety', items: ['sharp-knives', 'toxic-foods', 'secure-bins', 'appliance-gaps'] },
+                { title: '🚿 Bathroom Safety', items: ['toilet-lids', 'medications', 'small-items', 'cleaning-products'] }
+            ];
+            
+            sections.forEach(section => {
+                printContent += `<div class="section"><h2>${section.title}</h2>`;
+                section.items.forEach(itemId => {
+                    const checkbox = document.getElementById(itemId);
+                    const text = checkbox.nextElementSibling.textContent;
+                    const isChecked = checkbox.checked;
+                    printContent += `<div class="checklist-item ${isChecked ? 'completed' : ''}">
+                        <span class="checkbox">${isChecked ? '☑️' : '☐'}</span>${text}
+                    </div>`;
+                });
+                printContent += '</div>';
+            });
+            
+            printContent += `
+                    <div style="margin-top: 30px; padding: 15px; border: 2px solid #e8637a; border-radius: 10px;">
+                        <h2>🚨 Emergency Information</h2>
+                        <p><strong>Emergency Numbers:</strong> Keep your vet's number and the nearest 24-hour emergency clinic number easily accessible.</p>
+                        <p><strong>Pet First Aid:</strong> https://www.pdsa.org.uk/pet-help-and-advice/looking-after-your-pet/all-pets/first-aid-for-pets</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Add celebration animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes celebration {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.02); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize progress on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
