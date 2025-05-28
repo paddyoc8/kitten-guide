@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitten Socialisation Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette as template
+           ========================================================================== */
+        :root {
+        /* Primary Colors - Lighter Navy */
+        --color-primary: #5f7cae;           /* Lighter, brighter navy */
+        --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+        --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+        
+        /* Secondary Colors - Warmer Pink */
+        --color-secondary: #e8637a;         /* Warm coral-pink */
+        --color-secondary-light: #ed8296;   /* Lighter warm pink */
+        
+        /* Neutral Colors */
+        --color-white: #ffffff;
+        --color-light-gray: #f8f9fa;
+        --color-medium-gray: #e9ecef;
+        --color-dark-gray: #6c757d;
+        --color-text: #2c3e50;
+        --color-text-light: #6c757d;
+        
+        /* Status Colors - Softened Brights */
+        --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+        --color-warning: #e6941a;           /* Softened orange */
+        --color-danger: #e84545;            /* Muted coral red */
+        --color-info: #4a9de8;              /* Softened sky blue */
+        
+        /* Background Colors */
+        --bg-success: #e8f8f2;
+        --bg-warning: #fff8e1;
+        --bg-danger: #ffebee;
+        --bg-info: #e3f2fd;
+        
+        /* Border Colors */
+        --border-success: #c8f2e0;
+        --border-warning: #ffe0b2;
+        --border-danger: #ffcdd2;
+        --border-info: #bbdefb;
+        
+        /* Additional Muted Accents */
+        --color-accent-yellow: #f0d429;     /* Muted yellow */
+        --color-accent-purple: #9c3fa3;     /* Softened purple */
+        --color-accent-teal: #2e9688;       /* Muted teal */
+        --color-accent-coral: #e65a33;      /* Softened coral */
+        
+        /* Special Colors */
+        --color-muted: #8a9bb5;             /* Muted version of primary blue */
+        --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+        --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+        --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+        --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+        --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+        --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 40px;
+            overflow-y: auto;
+            background: var(--color-white);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"]:checked + * {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Sound section specific styling */
+        .sound-instructions {
+            background: linear-gradient(135deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(46, 150, 136, 0.2);
+        }
+
+        .sound-instructions h4 {
+            color: var(--color-white);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .sound-instructions ol {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .sound-instructions li {
+            counter-increment: step-counter;
+            margin-bottom: 12px;
+            padding-left: 40px;
+            position: relative;
+        }
+
+        .sound-instructions li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .sound-link {
+            background: var(--color-white-alpha-20);
+            border: 1px solid var(--color-white-alpha-30);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .sound-link a {
+            color: var(--color-accent-yellow);
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .sound-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .top-nav {
+                padding: 15px 20px;
+            }
+            
+            .app-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_litter_box_management.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Litter box management</span>
+                </a>
+                <a href="2_grooming_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Grooming</span>
+                </a>
+                <a href="3_kitten_socialisation_page.html" class="journey-phase active">
+                    <span class="phase-number">3</span>
+                    <span>Kitten socialisation</span>
+                </a>
+                <a href="4_play_enrichment_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Play enrichment</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="content-area">
+                <!-- Main Page -->
+                <div class="page-header">
+                    <h1 class="page-title">🤝 Socialisation</h1>
+                    <p class="page-subtitle">Essential socialisation experiences for your kitten's development</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <span>ℹ️</span>
+                    <div>
+                        On socialising your kitten, they should experience: different people, handling (including elements of vet handling, such as looking in their ears and handling their paws), sounds, and toys.
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h4>👥 Different People</h4>
+                        <p>Let the kitten meet different types of people. If the kitten is nervous, limit to one at a time in their safe space.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>🤲 Handling</h4>
+                        <p>Handle the kitten frequently, including the following:</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Restrained in hand
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Holding head
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Looking in ears
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Examining neck
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Stroking head, neck, back and tail
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Touching paws and legs
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Open mouth
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox"> Groom with soft brush
+                            </li>
+                        </ul>
+                        <div class="alert alert-warning" style="margin-top: 15px;">
+                            <span>⚠️</span>
+                            <div>Stop if cat shows any sign of distress.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🦶 Surfaces</h3>
+                    <p>Make sure the kitten walks on different surfaces, including:</p>
+                    <ul>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Shiny surfaces
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Tiles
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Lino
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Carpet
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Rough surfaces
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="form-section">
+                    <h3>🧳 Cat Carrier</h3>
+                    <ul>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Let the kitten find treats in their cat carrier while you are present in the room
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Once the cat has spent a few minutes in the carrier, practise closing the door
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Next try lifting the carrier, potentially with a blanket draped over
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Take brief car journeys that result in a reward at home
+                        </li>
+                    </ul>
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div>Start the process again if kitten shows signs of distress.</div>
+                    </div>
+                </div>
+
+                <div class="sound-instructions">
+                    <h4>🔊 Sounds</h4>
+                    <p style="margin-bottom: 20px;">Sound socialisation tends to be done while kittens are in their foster homes. However, continuing sound socialisation may be beneficial after their socialisation period.</p>
+                    
+                    <ol>
+                        <li><strong>Test the sound volume when the kittens are not in the room, so as not to spook them. Set the volume to a very low level so that it is barely audible.</strong></li>
+                        <li><strong>Start playing the audio at your marked low volume.</strong></li>
+                        <li><strong>If there are no adverse reactions from the kitten with the sound at the current level then you can leave the sounds playing through.</strong></li>
+                        <li><strong>You can systematically increase the volume depending on the reaction of the kitten.</strong></li>
+                    </ol>
+                    
+                    <div class="sound-link">
+                        <p><strong>Socialisation sounds:</strong></p>
+                        <a href="https://soundcloud.com/cats-protection/aerosol-can?utm_source=clipboard&utm_campaign=wtshare&utm_medium=widget&utm_content=https%253A%252F%252Fsoundcloud.com%252Fcats-protection%252Faerosol-can" target="_blank">
+                            https://soundcloud.com/cats-protection/aerosol-can
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🆕 New Experiences</h3>
+                    <ul>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Hoover
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> TV
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Mirrors
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Hairdryer
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Knocking
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Doorbell
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Opening and closing doors
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Washing machine
+                        </li>
+                        <li class="checklist-item">
+                            <input type="checkbox"> Dishwasher
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <span>✅</span>
+                    <div>
+                        <strong>Progress Tracking:</strong> Use the checkboxes above to track your kitten's socialisation progress. Regular, positive exposure to these experiences will help your kitten develop into a well-adjusted adult cat.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Save checkbox states
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                // You could add localStorage functionality here if needed
+                console.log('Checkbox state changed:', e.target.checked);
+            }
+        });
+    </script>
+</body>
+</html>

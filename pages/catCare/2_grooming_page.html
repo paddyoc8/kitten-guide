@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitten Grooming Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, var(--color-white) 0%, var(--color-light-gray) 100%);
+            border-right: 2px solid var(--color-medium-gray);
+            padding: 30px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .sidebar-header {
+            padding: 0 30px 20px;
+            border-bottom: 2px solid var(--color-medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--color-primary);
+            font-size: 1.3em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .sidebar-subtitle {
+            color: var(--color-text-light);
+            font-size: 0.9em;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            padding: 10px 15px;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, transparent 0%, rgba(232, 99, 122, 0.1) 50%, transparent 100%);
+            border-radius: 15px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 2px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-color: var(--color-primary-light);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: var(--color-white);
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(95, 124, 174, 0.3);
+        }
+
+        .sidebar-item .icon {
+            font-size: 1.2em;
+            margin-right: 12px;
+            min-width: 24px;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+            background: var(--color-white);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: none;
+                border-right: none;
+                border-bottom: 2px solid var(--color-medium-gray);
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation - Journey Phases -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_litter_box_management.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Litter box management</span>
+                </a>
+                <a href="2_grooming_page.html" class="journey-phase active">
+                    <span class="phase-number">2</span>
+                    <span>Grooming</span>
+                </a>
+                <a href="3_kitten_socialisation_page.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Kitten socialisation</span>
+                </a>
+                <a href="4_play_enrichment_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Play enrichment</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">✂️ Grooming</h1>
+                    <p class="page-subtitle">Keep your kitten healthy and comfortable with proper grooming practices</p>
+                </div>
+
+                <div class="alert alert-info">
+                    <span>💡</span>
+                    <div>
+                        <strong>Gentle Approach:</strong> Grooming should be carried out with as little restraint as possible to keep your kitten comfortable and stress-free.
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>🪶 Brushing & Coat Care</h3>
+                    <p style="margin-bottom: 15px; color: var(--color-text); line-height: 1.6;">
+                        Use a brush or a grooming mitt up to once a week to keep your kitten's coat healthy and reduce shedding. Regular brushing helps prevent matting and allows you to bond with your kitten.
+                    </p>
+                    
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div>
+                            <strong>Watch for Stress Signals:</strong> If you notice your cat twitching, swishing their tail, growling or hissing, end the session immediately. These are signs your kitten is uncomfortable and needs a break.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h4>💅 Claw Care</h4>
+                        <ul>
+                            <li>🌳 Scratching posts help keep claws naturally trimmed</li>
+                            <li>🏃‍♂️ Being active outside and climbing trees maintains claw health</li>
+                            <li>✂️ Occasionally claws may need to be trimmed</li>
+                            <li>🏠 Trimming can be done at home with proper tools</li>
+                            <li>🏥 Your vet can also trim claws during visits</li>
+                            <li>📖 Ask your vet to show you the proper technique first</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>🛁 Bathing Guidelines</h4>
+                        <ul>
+                            <li>🚫 Cats typically do not need to be bathed</li>
+                            <li>☠️ Only bathe if there's something toxic on their fur</li>
+                            <li>🧽 A damp cloth can remove most messes</li>
+                            <li>💧 Use the cloth method when possible</li>
+                            <li>🧴 If bathing is necessary, use cat-specific shampoo</li>
+                            <li>🌡️ Ensure water is lukewarm, never hot</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>📋 Grooming Best Practices</h3>
+                    <div class="info-card" style="margin-top: 0;">
+                        <h4>🎯 Step-by-Step Approach</h4>
+                        <ul>
+                            <li>🕐 Choose a quiet time when your kitten is relaxed</li>
+                            <li>🤗 Start with gentle pets to get them comfortable</li>
+                            <li>🪶 Begin brushing with light, gentle strokes</li>
+                            <li>👀 Watch your kitten's body language constantly</li>
+                            <li>⏰ Keep sessions short, especially when starting</li>
+                            <li>🎁 Reward with treats or play after grooming</li>
+                            <li>📅 Build up to longer sessions gradually</li>
+                            <li>✋ Always stop if your kitten shows stress signals</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span>✅</span>
+                    <div>
+                        <strong>Remember:</strong> Most cats are excellent self-groomers! Your role is to provide gentle assistance and check for any issues during bonding time. Less is often more when it comes to grooming.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
