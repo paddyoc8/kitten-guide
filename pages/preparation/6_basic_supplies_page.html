@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Supplies - Kitten Planning</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, var(--color-white) 0%, var(--color-light-gray) 100%);
+            border-right: 2px solid var(--color-medium-gray);
+            padding: 30px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .sidebar-header {
+            padding: 0 30px 20px;
+            border-bottom: 2px solid var(--color-medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--color-primary);
+            font-size: 1.3em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .sidebar-subtitle {
+            color: var(--color-text-light);
+            font-size: 0.9em;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            padding: 10px 15px;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, transparent 0%, rgba(232, 99, 122, 0.1) 50%, transparent 100%);
+            border-radius: 15px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 2px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-color: var(--color-primary-light);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: var(--color-white);
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(95, 124, 174, 0.3);
+        }
+
+        .sidebar-item .icon {
+            font-size: 1.2em;
+            margin-right: 12px;
+            min-width: 24px;
+        }
+
+        .sidebar-item .status-indicator {
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-warning);
+            border: 2px solid var(--color-white);
+        }
+
+        .sidebar-item .status-indicator.complete {
+            background: var(--color-success);
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+            background: var(--color-white);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .page-nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-medium-gray);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+        }
+
+        .nav-button:hover {
+            background: var(--color-medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"]:checked + * {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-primary) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(156, 63, 163, 0.2);
+        }
+
+        .progress-info {
+            background: linear-gradient(135deg, var(--color-info) 0%, var(--color-accent-teal) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            color: var(--color-white);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: none;
+                border-right: none;
+                border-bottom: 2px solid var(--color-medium-gray);
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-nav {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation - Journey Phases -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_questions_before_adopting.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Before adoption</span>
+                </a>
+                <a href="2_finding_vet_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Finding a vet</span>
+                </a>
+                <a href="3_pet_insurance_research.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Pet insurance</span>
+                </a>
+                <a href="4_cat_proofing_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Cat proofing</span>
+                </a>
+                <a href="5_future_planning_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Future planning</span>
+                </a>
+                <a href="6_basic_supplies_page.html" class="journey-phase active">
+                    <span class="phase-number">6</span>
+                    <span>Basic supplies</span>
+                </a>
+                <a href="7_toy-supplies-page.html" class="journey-phase">
+                    <span class="phase-number">7</span>
+                    <span>Toy supplies</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">🛒 Basic Supplies</h1>
+                    <p class="page-subtitle">Everything you need before your kitten arrives</p>
+                    <div class="page-nav">
+                        <button class="nav-button">← Previous: Timeline</button>
+                        <button class="nav-button">Next: Home Setup →</button>
+                        <button class="nav-button primary" onclick="saveProgress()">💾 Save Progress</button>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <span>💡</span>
+                    <div>
+                        <strong>Shopping Tip:</strong> Start shopping 1-2 weeks before your kitten's arrival. This gives you time to set everything up and make any exchanges if needed.
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <!-- Essentials Card -->
+                    <div class="info-card">
+                        <h4>🎯 Essentials</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-style: italic;">Must-have items for day one</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="carrier">
+                                <label for="carrier">Cat carrier (hard-sided and spacious)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="litterbox">
+                                <label for="litterbox">Litter box (low-sided for kittens)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="litter">
+                                <label for="litter">Cat litter (unscented, clumping)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="bowls">
+                                <label for="bowls">Food and water bowls (ceramic/stainless)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="food">
+                                <label for="food">Kitten food (same brand as foster)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="bed">
+                                <label for="bed">Comfortable bed/blankets (provide multiple options)</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Scratching Options Card -->
+                    <div class="info-card">
+                        <h4>🪵 Scratching Options</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-style: italic;">Build up these enrichment options gradually</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="vertical-post">
+                                <label for="vertical-post">Vertical scratching post (sisal or carpet)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="horizontal-scratcher">
+                                <label for="horizontal-scratcher">Horizontal cardboard scratcher</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="cat-tree">
+                                <label for="cat-tree">Cat tree (for climbing and scratching)</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Grooming & Care Card -->
+                    <div class="info-card">
+                        <h4>✂️ Grooming & Care</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-style: italic;">Essential grooming tools for health and bonding</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="brush">
+                                <label for="brush">Cat brush (soft for kittens)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="clippers">
+                                <label for="clippers">Nail clippers (cat-specific)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="toothbrush">
+                                <label for="toothbrush">Cat toothbrush (for future use)</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Cleaning & Maintenance Card -->
+                    <div class="info-card">
+                        <h4>🧹 Cleaning & Maintenance</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-style: italic;">Keep your home clean and kitten-ready</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="enzyme-cleaner">
+                                <label for="enzyme-cleaner">Enzyme cleaner (for accidents)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="litter-scoop">
+                                <label for="litter-scoop">Litter scoop</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="additional-box">
+                                <label for="additional-box">Additional litter box (for expansion)</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Extras & Enrichment Card -->
+                    <div class="info-card">
+                        <h4>🎁 Extras & Enrichment</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-style: italic;">Special items to enhance your kitten's environment</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="treats">
+                                <label for="treats">Cat treats (training/bonding)</label>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="perches">
+                                <label for="perches">Window or high perches</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="progress-info">
+                    <h3>📊 Shopping Progress</h3>
+                    <p id="progress-text">0 of 17 items checked off</p>
+                    <div style="margin-top: 10px;">
+                        <div id="progress-bar" style="width: 100%; height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden;">
+                            <div id="progress-fill" style="width: 0%; height: 100%; background: var(--color-accent-yellow); transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success" style="display: none;" id="completion-alert">
+                    <span>🎉</span>
+                    <div>
+                        <strong>Congratulations!</strong> You've checked off all essential supplies! Your kitten will have everything they need for a comfortable arrival.
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // In-memory storage for the session
+        let suppliesData = {
+            checkedItems: [],
+            lastUpdated: null
+        };
+
+        // Track progress
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            const checked = Array.from(checkboxes).filter(cb => cb.checked);
+            const total = checkboxes.length;
+            const percentage = Math.round((checked.length / total) * 100);
+            
+            // Update progress text
+            document.getElementById('progress-text').textContent = `${checked.length} of ${total} items checked off`;
+            
+            // Update progress bar
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            
+            // Update sidebar status
+            const statusIndicator = document.getElementById('suppliesStatus');
+            if (statusIndicator) {
+                statusIndicator.classList.toggle('complete', percentage === 100);
+            }
+            
+            // Show completion message
+            const completionAlert = document.getElementById('completion-alert');
+            if (percentage === 100) {
+                completionAlert.style.display = 'flex';
+            } else {
+                completionAlert.style.display = 'none';
+            }
+        }
+
+        function saveProgress() {
+            // Collect checkbox data
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            const checkedItems = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.id);
+            
+            // Save to in-memory storage
+            suppliesData = {
+                checkedItems: checkedItems,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            // Show success message
+            const checkedCount = checkedItems.length;
+            const totalCount = checkboxes.length;
+            alert(`✅ Progress saved in memory!\n\nItems completed: ${checkedCount}/${totalCount}\nCompletion: ${Math.round((checkedCount/totalCount)*100)}%\n\nNote: Data will persist during this session only.`);
+        }
+
+        // Auto-save data to memory
+        function autoSaveData() {
+            const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+            const checkedItems = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.id);
+            
+            // Auto-save to in-memory storage
+            suppliesData = {
+                checkedItems: checkedItems,
+                lastUpdated: new Date().toISOString()
+            };
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update progress when checkboxes change
+            document.addEventListener('change', function(e) {
+                if (e.target.type === 'checkbox') {
+                    updateProgress();
+                    autoSaveData(); // Auto-save when checkboxes change
+                }
+            });
+            
+            // Initial progress update
+            updateProgress();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Planning - Kitten Care</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: var(--color-white);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-primary) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(156, 63, 163, 0.2);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .progress-ring-circle {
+            fill: none;
+            stroke: var(--color-white-alpha-30);
+            stroke-width: 8;
+        }
+
+        .progress-ring-progress {
+            fill: none;
+            stroke: var(--color-accent-yellow);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dasharray 0.5s ease;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section:nth-child(4n) {
+            border-left-color: var(--color-secondary);
+        }
+
+        .form-section:nth-child(5n) {
+            border-left-color: var(--color-accent-coral);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + .checklist-text {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        .checklist-text {
+            flex: 1;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* Tips */
+        .tip-box {
+            background: var(--bg-info);
+            border: 2px solid var(--border-info);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            color: var(--color-info);
+            font-style: italic;
+        }
+
+        .tip-box strong {
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        /* Save Button */
+        .save-button {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 30px auto;
+            box-shadow: 0 4px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(232, 99, 122, 0.4);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 1.8em;
+            }
+            
+            .checklist-item {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Future Planning Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+
+            <div class="journey-nav">
+                <a href="1_questions_before_adopting.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Before adoption</span>
+                </a>
+                <a href="2_finding_vet_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Finding a vet</span>
+                </a>
+                <a href="3_pet_insurance_research.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Pet insurance</span>
+                </a>
+                <a href="4_cat_proofing_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Cat proofing</span>
+                </a>
+                <a href="5_future_planning_page.html" class="journey-phase active">
+                    <span class="phase-number">5</span>
+                    <span>Future planning</span>
+                </a>
+                <a href="6_basic_supplies_page.html" class="journey-phase">
+                    <span class="phase-number">6</span>
+                    <span>Basic supplies</span>
+                </a>
+                <a href="7_toy-supplies-page.html" class="journey-phase">
+                    <span class="phase-number">7</span>
+                    <span>Toy supplies</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="content-area">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">🔮 Future Planning</h1>
+                    <p class="page-subtitle">Use the following questions to guide your decisions and set your kitten up for a comfortable, happy life in your home.</p>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <h3>📊 Planning Progress</h3>
+                    <div class="progress-ring">
+                        <svg width="120" height="120">
+                            <circle class="progress-ring-circle" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-ring-progress" cx="60" cy="60" r="50" id="progressCircle"></circle>
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5em; font-weight: bold;" id="progressText">0%</div>
+                    </div>
+                    <p>Complete all planning considerations to ensure you're ready for your kitten's future!</p>
+                </div>
+
+                <!-- Sleep Planning Section -->
+                <div class="form-section">
+                    <h3>💤 Where Will My Cat Sleep Long-Term?</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sleep1" onchange="updateProgress()">
+                        <div class="checklist-text">Do I want my cat to sleep in my bedroom?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="sleep2" onchange="updateProgress()">
+                        <div class="checklist-text">What are the quiet and cosy spots in the home that would be best for cat beds?</div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Tip:</strong> Cats love warmth, elevation, and enclosed spaces. Try placing a bed near a window or in a quiet corner with a view.
+                    </div>
+                </div>
+
+                <!-- Feeding Planning Section -->
+                <div class="form-section">
+                    <h3>🍽️ Where Will My Cat Eat Long-Term?</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="eat1" onchange="updateProgress()">
+                        <div class="checklist-text">Where will be the best permanent feeding spot?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="eat2" onchange="updateProgress()">
+                        <div class="checklist-text">Where could a water bowl go if cats prefer to have their water bowl separate?</div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Tip:</strong> Avoid placing food near loud appliances.
+                    </div>
+                </div>
+
+                <!-- Litter Box Planning Section -->
+                <div class="form-section">
+                    <h3>🧴 Where Will the Litter Box Go Long-Term?</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="litter1" onchange="updateProgress()">
+                        <div class="checklist-text">Is the litter box in a quiet, private location where my cat feels safe?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="litter2" onchange="updateProgress()">
+                        <div class="checklist-text">Will I be able to clean this spot easily and frequently?</div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Tip:</strong> Make sure it's not in a place that gets too hot, cold, or noisy (like next to a washing machine).
+                    </div>
+                </div>
+
+                <!-- Territory Expansion Section -->
+                <div class="form-section">
+                    <h3>🏠 How Will My Cat's Territory Expand Over Time?</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="territory1" onchange="updateProgress()">
+                        <div class="checklist-text">Will there be any rooms off-limits to the cat?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="territory2" onchange="updateProgress()">
+                        <div class="checklist-text">Are there spaces I need to "cat-proof" (cords, plants, breakables) before allowing access?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="territory3" onchange="updateProgress()">
+                        <div class="checklist-text">Do I want to provide vertical spaces like shelves, cat trees, or window perches in different rooms?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="territory4" onchange="updateProgress()">
+                        <div class="checklist-text">Will we be planning to add in a cat flap for when the cat is ready to go outside?</div>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Tip:</strong> Cats think vertically. Giving them access to different levels of a room helps them feel secure and enriched.
+                    </div>
+                </div>
+
+                <!-- Routine Planning Section -->
+                <div class="form-section">
+                    <h3>📅 Routine Planning</h3>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--color-primary); margin-bottom: 10px; font-weight: 600;">🍽️ Feeding Schedule</h4>
+                        <p style="margin-bottom: 10px; color: var(--color-text-light);">Who will feed the cat, and when? How will we track when the cat has been fed?</p>
+                        <textarea 
+                            id="feedingSchedule" 
+                            placeholder="e.g., Mom feeds at 7am and 6pm, kids can give treats. We'll use a feeding chart on the fridge to track meals..."
+                            style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-family: inherit; resize: vertical;"
+                            onchange="updateProgress()"
+                        ></textarea>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--color-primary); margin-bottom: 10px; font-weight: 600;">🧹 Litter Box Maintenance</h4>
+                        <p style="margin-bottom: 10px; color: var(--color-text-light);">Who's responsible when? Where will any litter related products be stored?</p>
+                        <textarea 
+                            id="litterMaintenance" 
+                            placeholder="e.g., Daily scooping by Dad before work, weekly deep clean by Mom. Litter supplies stored in garage cabinet, scooping tools in bathroom closet..."
+                            style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-family: inherit; resize: vertical;"
+                            onchange="updateProgress()"
+                        ></textarea>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--color-primary); margin-bottom: 10px; font-weight: 600;">🚫 Boundaries</h4>
+                        <p style="margin-bottom: 10px; color: var(--color-text-light);">What do we want to be our household rules for the cat?</p>
+                        <textarea 
+                            id="boundaries" 
+                            placeholder="e.g., No cats on kitchen counters or dining table, bedroom is okay, no scratching furniture (only scratching posts), no jumping on guests..."
+                            style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-family: inherit; resize: vertical;"
+                            onchange="updateProgress()"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Lifestyle Integration Section -->
+                <div class="form-section">
+                    <h3>🤝 How Will This Affect Our Routine Together?</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="routine1" onchange="updateProgress()">
+                        <div class="checklist-text">Am I okay with a cat on the sofa, dining table, or counters—or do I need to start setting boundaries now?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="routine2" onchange="updateProgress()">
+                        <div class="checklist-text">Will this routine still work if our lifestyle changes (e.g., new job, travel, new pets)?</div>
+                    </div>
+                </div>
+
+                <!-- Other Considerations Section -->
+                <div class="form-section">
+                    <h3>🧠 Other Things to Consider</h3>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="other1" onchange="updateProgress()">
+                        <div class="checklist-text"><strong>Future proofing:</strong> As your kitten grows into an adult, are your plans flexible enough to adapt to their preferences and needs?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="other2" onchange="updateProgress()">
+                        <div class="checklist-text"><strong>Health and mobility:</strong> Will your chosen litterbox location or sleeping spot be accessible if your cat ever develops joint issues or disabilities?</div>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="other3" onchange="updateProgress()">
+                        <div class="checklist-text"><strong>Travel and boarding:</strong> Do you have a plan for where your cat will stay during vacations or emergencies?</div>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <button class="save-button" onclick="saveProgress()">
+                    💾 Save Future Planning Progress
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateProgress() {
+            // Get all checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            // Get all textareas
+            const textareas = document.querySelectorAll('textarea');
+            const filledTextareas = Array.from(textareas).filter(textarea => textarea.value.trim() !== '');
+            
+            // Calculate total items and completed items
+            const totalItems = checkboxes.length + textareas.length;
+            const completedItems = checked.length + filledTextareas.length;
+            
+            // Calculate percentage
+            const percentage = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+            
+            // Update progress ring
+            const circle = document.getElementById('progressCircle');
+            const progressText = document.getElementById('progressText');
+            
+            if (circle && progressText) {
+                const radius = 50;
+                const circumference = 2 * Math.PI * radius;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                circle.style.strokeDasharray = circumference;
+                circle.style.strokeDashoffset = offset;
+                
+                progressText.textContent = percentage + '%';
+            }
+        }
+
+        function saveProgress() {
+            // Collect all checkbox data
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const textareas = document.querySelectorAll('textarea');
+            const data = {};
+            
+            checkboxes.forEach(checkbox => {
+                data[checkbox.id] = checkbox.checked;
+            });
+            
+            textareas.forEach(textarea => {
+                data[textarea.id] = textarea.value;
+            });
+            
+            // Calculate completion
+            const completedCheckboxes = Object.values(data).filter(value => value === true).length;
+            const completedTextareas = Object.values(data).filter(value => typeof value === 'string' && value.trim() !== '').length;
+            const totalItems = checkboxes.length + textareas.length;
+            const completedItems = completedCheckboxes + completedTextareas;
+            
+            // Show success message
+            alert(`Future Planning progress saved! 🎉\n\nCompleted: ${completedItems}/${totalItems} items\n\nProgress: ${Math.round((completedItems/totalItems)*100)}%`);
+            
+            // Here you would normally send data to a server
+            console.log('Future Planning Data:', data);
+        }
+
+        // Initialize progress on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            
+            // Add real-time progress updates for textareas
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', updateProgress);
+            });
+        });
+    </script>
+</body>
+</html>

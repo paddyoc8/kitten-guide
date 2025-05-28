@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initial Toy Supplies - Kitten Planning</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+            background: var(--color-white);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Checklist Items */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"]:checked + * {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Storage Section Specific Styling */
+        .storage-section {
+            background: linear-gradient(135deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            color: var(--color-white);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(46, 150, 136, 0.2);
+        }
+
+        .storage-section h3 {
+            color: var(--color-white);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .storage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .storage-item {
+            background: var(--color-white-alpha-20);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid var(--color-white-alpha-30);
+            backdrop-filter: blur(10px);
+        }
+
+        .storage-checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: var(--color-white-alpha-20);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--color-white-alpha-30);
+        }
+
+        .storage-checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--color-accent-yellow);
+        }
+
+        .storage-checklist-item:hover {
+            background: var(--color-white-alpha-30);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .storage-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🧸 Initial Toy Supplies
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+
+            <div class="journey-nav">
+                <a href="1_questions_before_adopting.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Before adoption</span>
+                </a>
+                <a href="2_finding_vet_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Finding a vet</span>
+                </a>
+                <a href="3_pet_insurance_research.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Pet insurance</span>
+                </a>
+                <a href="4_cat_proofing_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Cat proofing</span>
+                </a>
+                <a href="5_future_planning_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Future planning</span>
+                </a>
+                <a href="6_basic_supplies_page.html" class="journey-phase">
+                    <span class="phase-number">6</span>
+                    <span>Basic supplies</span>
+                </a>
+                <a href="7_toy-supplies-page.html" class="journey-phase active">
+                    <span class="phase-number">7</span>
+                    <span>Toy supplies</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">🧸 Initial Toy Supplies</h1>
+                    <p class="page-subtitle">Build up toys gradually and regularly rotate the toys available for the cat</p>
+                </div>
+
+                <!-- Storage Section -->
+                <div class="storage-section">
+                    <h3>📦 Toy Storage & Organization</h3>
+                    <div class="storage-grid">
+                        <div class="storage-item">
+                            <div class="storage-checklist-item">
+                                <input type="checkbox" id="accessible-storage">
+                                <label for="accessible-storage">Accessible toy storage</label>
+                            </div>
+                        </div>
+                        <div class="storage-item">
+                            <div class="storage-checklist-item">
+                                <input type="checkbox" id="rotation-storage">
+                                <label for="rotation-storage">Toy rotation storage</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toy Categories -->
+                <div class="card-grid">
+                    <!-- Solo Toys -->
+                    <div class="info-card">
+                        <h4>🎾 Solo Toys</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-size: 0.9em;">Toys your kitten can play with independently</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="lightweight-balls">
+                                <span>Lightweight balls</span>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="fabric-mice">
+                                <span>Fabric Mice</span>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="puzzle-toys">
+                                <span>Puzzle Toys</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Interactive Toys -->
+                    <div class="info-card">
+                        <h4>🪶 Interactive Toys</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-size: 0.9em;">Toys that require human interaction for playtime</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="feather-wands">
+                                <span>Feather wands</span>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="string-toys">
+                                <span>String Toys</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Sensory Toys -->
+                    <div class="info-card">
+                        <h4>👂 Sensory Toys</h4>
+                        <p style="margin-bottom: 15px; color: var(--color-text-light); font-size: 0.9em;">Toys that stimulate different senses</p>
+                        <ul>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="toilet-rolls">
+                                <span>Toilet rolls</span>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="crinkle-balls">
+                                <span>Crinkle balls</span>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="rustling-paper">
+                                <span>Rustling paper bag (handles removed)</span>
+                            </li>
+                            <li class="checklist-item">
+                                <input type="checkbox" id="soft-carrying">
+                                <span>Soft carrying toys</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Information Alert -->
+                <div class="alert alert-info">
+                    <span>💡</span>
+                    <div>
+                        <strong>Toy Rotation Tip:</strong> Keep some toys stored away and rotate them weekly to maintain your kitten's interest. This makes "old" toys feel new and exciting again!
+                    </div>
+                </div>
+
+                <!-- Link to Additional Information -->
+                <div class="form-section">
+                    <h3>📚 Additional Resources</h3>
+                    <div class="alert alert-success">
+                        <span>🔗</span>
+                        <div>
+                            <strong>For More Information:</strong> Check out "Play and Enrichment" under First Month for detailed guidance on engaging your kitten in healthy play activities.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track completion status
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            const completionRate = checkboxes.length > 0 ? (checkedBoxes.length / checkboxes.length) * 100 : 0;
+            
+            console.log(`Toy supplies progress: ${Math.round(completionRate)}% complete`);
+            
+            // You could add visual progress indicators here if needed
+            // For example, updating a progress bar or changing colors
+        }
+
+        // Add event listeners for all checkboxes
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                updateProgress();
+                
+                // Add visual feedback when items are checked
+                const listItem = e.target.closest('.checklist-item') || e.target.closest('.storage-checklist-item');
+                if (listItem) {
+                    if (e.target.checked) {
+                        listItem.style.backgroundColor = 'var(--bg-success)';
+                        listItem.style.borderLeftColor = 'var(--color-success)';
+                    } else {
+                        listItem.style.backgroundColor = '';
+                        listItem.style.borderLeftColor = '';
+                    }
+                }
+            }
+        });
+
+        // Initialize progress tracking
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+
+        // Save function (could be integrated with main planning system)
+        function saveToySupplies() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const toyData = {};
+            
+            checkboxes.forEach(checkbox => {
+                toyData[checkbox.id] = checkbox.checked;
+            });
+            
+            // This would typically save to your main planning data structure
+            console.log('Toy supplies data:', toyData);
+            alert('Toy supplies checklist saved! 🧸');
+        }
+    </script>
+</body>
+</html>

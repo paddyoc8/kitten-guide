@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions Before Adopting</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+            background: var(--color-white);
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Card Components */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .question-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+        }
+
+        .question-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .question-icon {
+            background: var(--color-secondary);
+            color: var(--color-white);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .question-content {
+            flex: 1;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 5px;
+        }
+
+        .question-reason {
+            font-size: 0.9em;
+            color: var(--color-text-light);
+            font-style: italic;
+        }
+
+        .observation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px;
+            background: var(--color-light-gray);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--color-accent-teal);
+        }
+
+        .observation-icon {
+            font-size: 1.2em;
+            color: var(--color-accent-teal);
+        }
+
+        .consideration-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--bg-warning) 0%, var(--color-white) 100%);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--color-warning);
+            border: 1px solid var(--border-warning);
+        }
+
+        .consideration-icon {
+            background: var(--color-warning);
+            color: var(--color-white);
+            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+
+        .consideration-content h5 {
+            color: var(--color-warning);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .consideration-content p {
+            color: var(--color-text);
+            font-size: 0.9em;
+        }
+
+        /* Alert Components */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--color-medium-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9em;
+            color: var(--color-text-light);
+            font-weight: 600;
+        }
+
+        /* Form Elements */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .form-group input, .form-group select {
+            padding: 8px 12px;
+            border: 2px solid var(--color-medium-gray);
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            background: var(--color-white);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 3px rgba(232, 99, 122, 0.1);
+        }
+
+        .yes-no-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .yes-no-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--color-medium-gray);
+            background: var(--color-white);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+        }
+
+        .yes-no-btn:hover {
+            border-color: var(--color-secondary);
+        }
+
+        .yes-no-btn.selected {
+            background: var(--color-secondary);
+            color: var(--color-white);
+            border-color: var(--color-secondary);
+        }
+
+        .yes-no-btn.selected.no {
+            background: var(--color-danger);
+            border-color: var(--color-danger);
+        }
+
+        .question-checkbox {
+            margin-right: 15px;
+            accent-color: var(--color-secondary);
+            transform: scale(1.2);
+        }
+
+        .compact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .compact-card {
+            background: var(--color-white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--color-warning);
+            transition: all 0.3s ease;
+        }
+
+        .compact-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .compact-card h5 {
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .compact-card p {
+            color: var(--color-text-light);
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .question-item, .consideration-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .question-icon, .consideration-icon {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation - Journey Phases -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_questions_before_adopting.html" class="journey-phase active">
+                    <span class="phase-number">1</span>
+                    <span>Before adoption</span>
+                </a>
+                <a href="2_finding_vet_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Finding a vet</span>
+                </a>
+                <a href="3_pet_insurance_research.html" class="journey-phase">
+                    <span class="phase-number">3</span>
+                    <span>Pet insurance</span>
+                </a>
+                <a href="4_cat_proofing_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Cat proofing</span>
+                </a>
+                <a href="5_future_planning_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Future planning</span>
+                </a>
+                <a href="6_basic_supplies_page.html" class="journey-phase">
+                    <span class="phase-number">6</span>
+                    <span>Basic supplies</span>
+                </a>
+                <a href="7_toy-supplies-page.html" class="journey-phase">
+                    <span class="phase-number">7</span>
+                    <span>Toy supplies</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h1 class="page-title">❓ Questions Before Adopting</h1>
+                    <p class="page-subtitle">Essential questions and observations to make the best choice for your family</p>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="progressPercent">0%</span> Complete
+                            <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: center;">
+                                <button onclick="saveProgress()" style="padding: 8px 16px; background: var(--color-secondary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em;">💾 Save Progress</button>
+                                <button onclick="exportProgress()" style="padding: 8px 16px; background: var(--color-primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em;">📋 Export Progress</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions for Foster/Breeder Section -->
+                <div class="form-section">
+                    <h3>🗣️ Questions for the Foster/Breeder</h3>
+                    <p style="margin-bottom: 20px; color: var(--color-text-light);">Ask these important questions to understand your kitten's background and needs:</p>
+                    
+                    <div class="question-item">
+                        <input type="checkbox" class="question-checkbox" id="q1-asked" onchange="updateProgress()">
+                        <div class="question-icon">1</div>
+                        <div class="question-content">
+                            <div class="question-text">When was the kitten born?</div>
+                            <div class="question-reason">Important for knowing developmental stage and vaccination timing</div>
+                            <div class="form-group">
+                                <label for="q1-date">Birth Date:</label>
+                                <input type="date" id="q1-date" onchange="updateProgress()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <input type="checkbox" class="question-checkbox" id="q2-asked" onchange="updateProgress()">
+                        <div class="question-icon">2</div>
+                        <div class="question-content">
+                            <div class="question-text">Was the kitten raised with its mother?</div>
+                            <div class="question-reason">Affects socialisation and behavior development</div>
+                            <div class="form-group">
+                                <label for="q2-answer">Answer:</label>
+                                <select id="q2-answer" onchange="updateProgress()">
+                                    <option value="">Select answer</option>
+                                    <option value="yes">Yes, fully raised with mother</option>
+                                    <option value="partial">Partially raised with mother</option>
+                                    <option value="no">No, separated early</option>
+                                    <option value="unknown">Unknown/Not sure</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <input type="checkbox" class="question-checkbox" id="q3-asked" onchange="updateProgress()">
+                        <div class="question-icon">3</div>
+                        <div class="question-content">
+                            <div class="question-text">Is the kitten friendly?</div>
+                            <div class="question-reason">Helps gauge temperament and socialisation level</div>
+                            <div class="form-group">
+                                <label for="q3-answer">Temperament:</label>
+                                <select id="q3-answer" onchange="updateProgress()">
+                                    <option value="">Select temperament</option>
+                                    <option value="very-friendly">Very friendly and outgoing</option>
+                                    <option value="friendly">Friendly but cautious</option>
+                                    <option value="shy">Shy but warms up</option>
+                                    <option value="fearful">Fearful or very shy</option>
+                                    <option value="mixed">Mixed - depends on situation</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <input type="checkbox" class="question-checkbox" id="q4-asked" onchange="updateProgress()">
+                        <div class="question-icon">4</div>
+                        <div class="question-content">
+                            <div class="question-text">Is the kitten healthy?</div>
+                            <div class="question-reason">Ask about any medical issues or treatments</div>
+                            <div class="form-group">
+                                <label for="q4-answer">Health Status:</label>
+                                <select id="q4-answer" onchange="updateProgress()">
+                                    <option value="">Select health status</option>
+                                    <option value="excellent">Excellent health, no issues</option>
+                                    <option value="good">Good health, minor issues resolved</option>
+                                    <option value="fair">Fair health, some ongoing care needed</option>
+                                    <option value="poor">Poor health, significant issues</option>
+                                    <option value="unknown">Health status unknown</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item">
+                        <input type="checkbox" class="question-checkbox" id="q5-asked" onchange="updateProgress()">
+                        <div class="question-icon">5</div>
+                        <div class="question-content">
+                            <div class="question-text">Where did it spend 1-9 weeks old?</div>
+                            <div class="question-reason">Critical socialisation period location impacts behavior</div>
+                            <div class="form-group">
+                                <label for="q5-answer">Environment:</label>
+                                <select id="q5-answer" onchange="updateProgress()">
+                                    <option value="">Select environment</option>
+                                    <option value="foster-home">Foster home with family</option>
+                                    <option value="breeder-home">Breeder's home environment</option>
+                                    <option value="shelter">Animal shelter</option>
+                                    <option value="outdoor">Outdoor/feral environment</option>
+                                    <option value="mixed">Mixed environments</option>
+                                    <option value="unknown">Unknown</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Things to Observe Section -->
+                <div class="form-section">
+                    <h3>👀 Things to Observe During Your Visit</h3>
+                    <p style="margin-bottom: 20px; color: var(--color-text-light);">Look for these important signs during your visit:</p>
+                    
+                    <div class="observation-item">
+                        <input type="checkbox" class="question-checkbox" id="obs1-checked" onchange="updateProgress()">
+                        <div class="observation-icon">👶</div>
+                        <div>
+                            <strong>Can you see the kitten with its mother?</strong> Observe their interaction and bonding
+                            <div class="yes-no-buttons">
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs1', 'yes')" data-value="yes">Yes</button>
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs1', 'no')" data-value="no">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="observation-item">
+                        <input type="checkbox" class="question-checkbox" id="obs2-checked" onchange="updateProgress()">
+                        <div class="observation-icon">😸</div>
+                        <div>
+                            <strong>Is the mother healthy and friendly?</strong> This indicates genetics and quality of early care
+                            <div class="yes-no-buttons">
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs2', 'yes')" data-value="yes">Yes</button>
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs2', 'no')" data-value="no">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="observation-item">
+                        <input type="checkbox" class="question-checkbox" id="obs3-checked" onchange="updateProgress()">
+                        <div class="observation-icon">🏠</div>
+                        <div>
+                            <strong>Are there many other cats/litters?</strong> High numbers can indicate poor care or puppy mill conditions
+                            <div class="yes-no-buttons">
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs3', 'yes')" data-value="yes">Yes</button>
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs3', 'no')" data-value="no">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="observation-item">
+                        <input type="checkbox" class="question-checkbox" id="obs4-checked" onchange="updateProgress()">
+                        <div class="observation-icon">✨</div>
+                        <div>
+                            <strong>Is the environment clean?</strong> Look for odours, cleanliness, and organisation
+                            <div class="yes-no-buttons">
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs4', 'yes')" data-value="yes">Yes</button>
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs4', 'no')" data-value="no">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="observation-item">
+                        <input type="checkbox" class="question-checkbox" id="obs5-checked" onchange="updateProgress()">
+                        <div class="observation-icon">💪</div>
+                        <div>
+                            <strong>Does the kitten look healthy?</strong> Clear eyes, clean ears, active behaviour
+                            <div class="yes-no-buttons">
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs5', 'yes')" data-value="yes">Yes</button>
+                                <button type="button" class="yes-no-btn" onclick="selectYesNo(this, 'obs5', 'no')" data-value="no">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="observation-item">
+                        <input type="checkbox" class="question-checkbox" id="obs6-checked" onchange="updateProgress()">
+                        <div class="observation-icon">❤️</div>
+                        <div>
+                            <strong>By visit end: was kitten friendly, nervous, or fearful?</strong> Note their overall temperament
+                            <div class="form-group" style="margin-top: 10px;">
+                                <select id="obs6-temperament" onchange="updateProgress()">
+                                    <option value="">Select temperament observed</option>
+                                    <option value="very-friendly">Very friendly and confident</option>
+                                    <option value="friendly">Friendly but cautious</option>
+                                    <option value="neutral">Neutral/observant</option>
+                                    <option value="nervous">Nervous but curious</option>
+                                    <option value="fearful">Fearful or hiding</option>
+                                    <option value="mixed">Mixed reactions</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Essential Considerations Section -->
+                <div class="form-section">
+                    <h3>⚠️ Essential Considerations</h3>
+                    <p style="margin-bottom: 20px; color: var(--color-text-light);">Important topics to discuss and arrange:</p>
+                    
+                    <div class="consideration-item">
+                        <div class="consideration-icon">🔍</div>
+                        <div class="consideration-content">
+                            <h5>Microchipping</h5>
+                            <p>Permanent identification for safety - ensure this is done or arrange it</p>
+                        </div>
+                    </div>
+
+                    <div class="consideration-item">
+                        <div class="consideration-icon">🪱</div>
+                        <div class="consideration-content">
+                            <h5>Worming</h5>
+                            <p>When was it last done and what treatment was used?</p>
+                        </div>
+                    </div>
+
+                    <div class="consideration-item">
+                        <div class="consideration-icon">💉</div>
+                        <div class="consideration-content">
+                            <h5>Vaccinating</h5>
+                            <p>What's been done and what vaccinations are still needed?</p>
+                        </div>
+                    </div>
+
+                    <div class="consideration-item">
+                        <div class="consideration-icon">✂️</div>
+                        <div class="consideration-content">
+                            <h5>Neutering</h5>
+                            <p>Timing discussion and clarify if it's your responsibility or theirs</p>
+                        </div>
+                    </div>
+
+                    <div class="consideration-item">
+                        <div class="consideration-icon">🏥</div>
+                        <div class="consideration-content">
+                            <h5>Pet Insurance</h5>
+                            <p>Research options and arrange coverage before pickup day</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confidence Tip Alert -->
+                <div class="alert alert-success">
+                    <span style="font-size: 1.5em;">💡</span>
+                    <div>
+                        <strong>Confidence Tip:</strong> A reputable breeder or foster will welcome these questions and provide detailed answers. If they seem evasive or annoyed, this is a red flag. Good caregivers want to ensure their kittens go to prepared, caring homes.
+                    </div>
+                </div>
+
+                <!-- Additional Tip -->
+                <div class="alert alert-info">
+                    <span style="font-size: 1.5em;">📝</span>
+                    <div>
+                        <strong>Pro Tip:</strong> Write down the answers during your visit or bring this list with you. It's easy to forget important details when you're excited about meeting your potential new companion!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Progress tracking variables
+        let selectedAnswers = {};
+
+        function updateProgress() {
+            let totalItems = 0;
+            let completedItems = 0;
+
+            // Check question checkboxes and their answers
+            for (let i = 1; i <= 5; i++) {
+                const checkbox = document.getElementById(`q${i}-asked`);
+                const input = document.getElementById(i === 1 ? `q${i}-date` : `q${i}-answer`);
+                
+                totalItems++;
+                if (checkbox && checkbox.checked && input && input.value) {
+                    completedItems++;
+                }
+            }
+
+            // Check observation checkboxes and their answers
+            for (let i = 1; i <= 6; i++) {
+                const checkbox = document.getElementById(`obs${i}-checked`);
+                totalItems++;
+                
+                if (checkbox && checkbox.checked) {
+                    if (i === 6) {
+                        // Last observation has dropdown
+                        const dropdown = document.getElementById('obs6-temperament');
+                        if (dropdown && dropdown.value) {
+                            completedItems++;
+                        }
+                    } else {
+                        // Other observations have yes/no buttons
+                        if (selectedAnswers[`obs${i}`]) {
+                            completedItems++;
+                        }
+                    }
+                }
+            }
+
+            // Calculate percentage
+            const percentage = Math.round((completedItems / totalItems) * 100);
+
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            if (progressFill && progressPercent) {
+                progressFill.style.width = percentage + '%';
+                progressPercent.textContent = percentage + '%';
+            }
+        }
+
+        function selectYesNo(button, questionId, value) {
+            // Remove selected class from all buttons in this group
+            const parentDiv = button.parentElement;
+            const allButtons = parentDiv.querySelectorAll('.yes-no-btn');
+            allButtons.forEach(btn => {
+                btn.classList.remove('selected', 'no');
+            });
+
+            // Add selected class to clicked button
+            button.classList.add('selected');
+            if (value === 'no') {
+                button.classList.add('no');
+            }
+
+            // Store the answer
+            selectedAnswers[questionId] = value;
+
+            // Update progress
+            updateProgress();
+        }
+
+        // Initialize progress on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+
+        // Memory-based data storage (no sessionStorage due to sandbox restrictions)
+        let progressData = {
+            questions: {},
+            observations: {}
+        };
+
+        // Save progress to memory
+        function saveProgress() {
+            // Collect question data
+            for (let i = 1; i <= 5; i++) {
+                const checkbox = document.getElementById(`q${i}-asked`);
+                const input = document.getElementById(i === 1 ? `q${i}-date` : `q${i}-answer`);
+                
+                progressData.questions[`q${i}`] = {
+                    asked: checkbox ? checkbox.checked : false,
+                    answer: input ? input.value : ''
+                };
+            }
+
+            // Collect observation data
+            for (let i = 1; i <= 6; i++) {
+                const checkbox = document.getElementById(`obs${i}-checked`);
+                let answer = '';
+                
+                if (i === 6) {
+                    const dropdown = document.getElementById('obs6-temperament');
+                    answer = dropdown ? dropdown.value : '';
+                } else {
+                    answer = selectedAnswers[`obs${i}`] || '';
+                }
+                
+                progressData.observations[`obs${i}`] = {
+                    checked: checkbox ? checkbox.checked : false,
+                    answer: answer
+                };
+            }
+
+            // Show save confirmation
+            alert('Progress saved in memory! ✅\n\nNote: Data will persist during this session only.');
+        }
+
+        // Export progress data as text (for user to copy if needed)
+        function exportProgress() {
+            saveProgress(); // Update the data first
+            
+            let exportText = "KITTEN ADOPTION QUESTIONS PROGRESS\n";
+            exportText += "=====================================\n\n";
+            
+            exportText += "QUESTIONS ASKED:\n";
+            Object.keys(progressData.questions).forEach(qId => {
+                const qData = progressData.questions[qId];
+                exportText += `${qId.toUpperCase()}: ${qData.asked ? '✅' : '❌'} Asked: ${qData.answer || 'No answer'}\n`;
+            });
+            
+            exportText += "\nOBSERVATIONS:\n";
+            Object.keys(progressData.observations).forEach(obsId => {
+                const obsData = progressData.observations[obsId];
+                exportText += `${obsId.toUpperCase()}: ${obsData.checked ? '✅' : '❌'} Observed: ${obsData.answer || 'No answer'}\n`;
+            });
+            
+            // Copy to clipboard or show in alert
+            navigator.clipboard.writeText(exportText).then(() => {
+                alert('Progress copied to clipboard! 📋');
+            }).catch(() => {
+                // Fallback: show in alert for manual copying
+                alert('Copy this progress summary:\n\n' + exportText);
+            });
+        }
+    </script>
+</body>
+</html>

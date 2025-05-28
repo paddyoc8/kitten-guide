@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Researching Pet Insurance</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Background Colors */
+    --bg-success: #e8f8f2;
+    --bg-warning: #fff8e1;
+    --bg-danger: #ffebee;
+    --bg-info: #e3f2fd;
+    
+    /* Border Colors */
+    --border-success: #c8f2e0;
+    --border-warning: #ffe0b2;
+    --border-danger: #ffcdd2;
+    --border-info: #bbdefb;
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area - Now lighter with white background */
+        .main-content {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation - Now with primary navy as accent */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, var(--color-white) 0%, var(--color-light-gray) 100%);
+            border-right: 2px solid var(--color-medium-gray);
+            padding: 30px 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .sidebar-header {
+            padding: 0 30px 20px;
+            border-bottom: 2px solid var(--color-medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--color-primary);
+            font-size: 1.3em;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .sidebar-subtitle {
+            color: var(--color-text-light);
+            font-size: 0.9em;
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section-title {
+            padding: 10px 15px;
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, transparent 0%, rgba(232, 99, 122, 0.1) 50%, transparent 100%);
+            border-radius: 15px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin: 2px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-color: var(--color-primary-light);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            color: var(--color-white);
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(95, 124, 174, 0.3);
+        }
+
+        .sidebar-item .icon {
+            font-size: 1.2em;
+            margin-right: 12px;
+            min-width: 24px;
+        }
+
+        .sidebar-item .status-indicator {
+            margin-left: auto;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--color-warning);
+            border: 2px solid var(--color-white);
+        }
+
+        .sidebar-item .status-indicator.complete {
+            background: var(--color-success);
+        }
+
+        /* Content Area - Brighter with accent colors */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+            background: var(--color-white);
+        }
+
+        .page {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--color-light-gray);
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.2em;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        /* Form Components - More colorful and engaging */
+        .form-section {
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--color-info);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-section:nth-child(even) {
+            border-left-color: var(--color-accent-teal);
+        }
+
+        .form-section:nth-child(3n) {
+            border-left-color: var(--color-accent-purple);
+        }
+
+        .form-section h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        /* Checklist Items - More engaging */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: var(--color-light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--color-medium-gray);
+            line-height: 1.5;
+        }
+
+        .checklist-item:hover {
+            background: var(--color-medium-gray);
+            transform: translateX(5px);
+            border-left-color: var(--color-secondary);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checklist-item label {
+            margin: 0;
+            font-weight: 600;
+            color: var(--color-text);
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .checklist-item input[type="checkbox"]:checked + label {
+            color: var(--color-success);
+            text-decoration: line-through;
+        }
+
+        .checklist-description {
+            font-size: 0.9em;
+            color: var(--color-text-light);
+            margin-top: 5px;
+            font-weight: normal;
+        }
+
+        /* Alert Components - More colorful */
+        .alert {
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        .alert-warning {
+            background: var(--bg-warning);
+            border-color: var(--color-warning);
+            color: var(--color-warning);
+        }
+
+        .alert-success {
+            background: var(--bg-success);
+            border-color: var(--color-success);
+            color: var(--color-success);
+        }
+
+        .alert-danger {
+            background: var(--bg-danger);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: none;
+                border-right: none;
+                border-bottom: 2px solid var(--color-medium-gray);
+            }
+            
+            .journey-nav {
+                padding: 0 15px;
+            }
+            
+            .journey-phase {
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+        }
+
+        .nav-button {
+            background: var(--color-light-gray);
+            border: 2px solid var(--color-medium-gray);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            margin-top: 20px;
+        }
+
+        .nav-button:hover {
+            background: var(--color-medium-gray);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .nav-button.primary {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            border: none;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation - Journey Phases -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_questions_before_adopting.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Before adoption</span>
+                </a>
+                <a href="2_finding_vet_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>Finding a vet</span>
+                </a>
+                <a href="3_pet_insurance_research.html" class="journey-phase active">
+                    <span class="phase-number">3</span>
+                    <span>Pet insurance</span>
+                </a>
+                <a href="4_cat_proofing_page.html" class="journey-phase">
+                    <span class="phase-number">4</span>
+                    <span>Cat proofing</span>
+                </a>
+                <a href="5_future_planning_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Future planning</span>
+                </a>
+                <a href="6_basic_supplies_page.html" class="journey-phase">
+                    <span class="phase-number">6</span>
+                    <span>Basic supplies</span>
+                </a>
+                <a href="7_toy-supplies-page.html" class="journey-phase">
+                    <span class="phase-number">7</span>
+                    <span>Toy supplies</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page">
+                    <div class="page-header">
+                        <h1 class="page-title">🔎 Researching Pet Insurance</h1>
+                        <p class="page-subtitle">Use this guide to compare policies and ensure you're fully covered for your pet's needs.</p>
+                    </div>
+
+                    <!-- Basic Policy Features Section -->
+                    <div id="basic-features" class="form-section">
+                        <h3>🔎 Basic Policy Features</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="font-weight: 600; color: var(--color-text); margin-bottom: 10px; display: block;">What type of policy is it?</label>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="lifetime-policy">
+                                    <label for="lifetime-policy">Lifetime</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="maximum-benefit">
+                                    <label for="maximum-benefit">Maximum benefit (per condition limit)</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="time-limited">
+                                    <label for="time-limited">Time-limited (e.g. 12-month condition cover)</label>
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox" id="accident-only">
+                                    <label for="accident-only">Accident-only</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="illness-coverage">
+                            <label for="illness-coverage">
+                                Does the policy cover illnesses as well as accidents?
+                                <div class="checklist-description">
+                                    Be cautious with accident-only plans—they exclude illnesses.
+                                </div>
+                            </label>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="waiting-period" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">What is the waiting period before cover starts?</label>
+                            <input type="text" id="waiting-period" placeholder="e.g., 14 days for illness, 48 hours for accidents" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                        </div>
+                    </div>
+
+                    <!-- Coverage Details Section -->
+                    <div id="coverage-details" class="form-section">
+                        <h3>🐾 Coverage Details</h3>
+                        
+                        <div class="checklist-item">
+                            <input type="checkbox" id="chronic-conditions">
+                            <label for="chronic-conditions">
+                                Chronic conditions covered?
+                                <div class="checklist-description">
+                                    Especially important in lifetime policies—check if the limit resets annually.
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="hereditary-conditions">
+                            <label for="hereditary-conditions">
+                                Hereditary, congenital, and breed-specific conditions covered?
+                                <div class="checklist-description">
+                                    Critical for purebred pets with known genetic predispositions.
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="dental-care">
+                            <label for="dental-care">
+                                Illness/injury-related dental care included?
+                                <div class="checklist-description">
+                                    This covers dental problems due to illness or injury, not routine cleaning.
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="rehabilitation">
+                            <label for="rehabilitation">
+                                Rehabilitation therapies covered?
+                                <div class="checklist-description">
+                                    E.g. hydrotherapy, physiotherapy, acupuncture (must be vet-referred)
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Financial Factors Section -->
+                    <div id="financial-factors" class="form-section">
+                        <h3>💰 Financial Factors</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label for="monthly-premium" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Monthly premium cost?</label>
+                            <input type="text" id="monthly-premium" placeholder="e.g., £25.00 per month" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Compare quotes, but also check what you get for the price.
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="excess-payment" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Excess per claim or per condition?</label>
+                            <input type="text" id="excess-payment" placeholder="e.g., £125 flat fee or 25% co-payment" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Check: Flat fee (e.g. £125) vs. % co-payment (e.g. 25%) for older pets
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="annual-limit" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Annual limit – Maximum total claimable per year</label>
+                            <input type="text" id="annual-limit" placeholder="e.g., £12,000 per year" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Higher limits provide better protection for serious conditions.
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="condition-limit" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Condition limit – Max per condition across lifetime</label>
+                            <input type="text" id="condition-limit" placeholder="e.g., £6,000 per condition" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Important for chronic conditions that require ongoing treatment.
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="time-limit" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Time limit – Max claim period per condition</label>
+                            <input type="text" id="time-limit" placeholder="e.g., 12 months per condition" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Some policies limit how long you can claim for each condition.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policy Continuity Section -->
+                    <div id="policy-continuity" class="form-section">
+                        <h3>🔁 Policy Continuity</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label for="switch-cancel" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">What happens if you switch or cancel?</label>
+                            <textarea id="switch-cancel" placeholder="Describe policy terms for switching providers or cancelling..." style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em; min-height: 80px; resize: vertical;"></textarea>
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                New policies may not cover past or ongoing conditions (pre-existing)
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="renewal-coverage" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Does coverage continue if you renew annually without a break?</label>
+                            <select id="renewal-coverage" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                                <option value="">Select option</option>
+                                <option value="yes">Yes - continuous coverage maintained</option>
+                                <option value="no">No - treated as new policy</option>
+                                <option value="partial">Partial - some conditions excluded</option>
+                                <option value="unclear">Policy unclear on this point</option>
+                            </select>
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Continuous coverage is important to avoid pre-existing condition exclusions.
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="age-limits" style="font-weight: 600; color: var(--color-text); margin-bottom: 8px; display: block;">Are there age limits for starting or continuing cover?</label>
+                            <input type="text" id="age-limits" placeholder="e.g., Must start before age 8, can continue until age 14" style="width: 100%; padding: 12px; border: 2px solid var(--color-medium-gray); border-radius: 10px; font-size: 1em;">
+                            <div class="checklist-description" style="margin-top: 5px;">
+                                Upper age limits vary by species and breed
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Claims and Admin Section -->
+                    <div id="claims-admin" class="form-section">
+                        <h3>🧾 Claims and Admin</h3>
+                        
+                        <div class="checklist-item">
+                            <input type="checkbox" id="claim-process">
+                            <label for="claim-process">
+                                How do you make a claim?
+                                <div class="checklist-description">
+                                    Check: Direct vet payment or claim-back process? Online portal, phone, app?
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="reviews-partnerships">
+                            <label for="reviews-partnerships">
+                                Any customer reviews or vet partnerships available?
+                                <div class="checklist-description">
+                                    Research customer satisfaction and vet network affiliations.
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Important Exclusions Section -->
+                    <div id="exclusions" class="form-section">
+                        <h3>⚠️ Important Exclusions (Common to Most Policies)</h3>
+                        
+                        <div class="alert alert-warning">
+                            <span>⚠️</span>
+                            <div>
+                                <strong>Standard Exclusions:</strong> Pet insurance usually does not cover the following items. Make sure you understand what's excluded from your policy.
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 20px;">
+                            <div style="background: var(--color-light-gray); padding: 15px; border-radius: 12px; border-left: 4px solid var(--color-danger);">
+                                <h4 style="color: var(--color-text); margin-bottom: 8px; font-weight: 600;">Routine care</h4>
+                                <p style="color: var(--color-text-light); font-size: 0.9em; margin: 0;">Check-ups, nail trimming, grooming - Regular maintenance and wellness visits are typically not covered.</p>
+                            </div>
+
+                            <div style="background: var(--color-light-gray); padding: 15px; border-radius: 12px; border-left: 4px solid var(--color-danger);">
+                                <h4 style="color: var(--color-text); margin-bottom: 8px; font-weight: 600;">Preventive care</h4>
+                                <p style="color: var(--color-text-light); font-size: 0.9em; margin: 0;">Vaccinations, flea/tick/worm treatment - Standard preventive treatments are usually excluded.</p>
+                            </div>
+
+                            <div style="background: var(--color-light-gray); padding: 15px; border-radius: 12px; border-left: 4px solid var(--color-danger);">
+                                <h4 style="color: var(--color-text); margin-bottom: 8px; font-weight: 600;">Neutering/spaying</h4>
+                                <p style="color: var(--color-text-light); font-size: 0.9em; margin: 0;">Elective surgical procedures are typically not covered.</p>
+                            </div>
+
+                            <div style="background: var(--color-light-gray); padding: 15px; border-radius: 12px; border-left: 4px solid var(--color-danger);">
+                                <h4 style="color: var(--color-text); margin-bottom: 8px; font-weight: 600;">Dental cleaning</h4>
+                                <p style="color: var(--color-text-light); font-size: 0.9em; margin: 0;">Routine dental hygiene is usually excluded (vs. disease treatment).</p>
+                            </div>
+
+                            <div style="background: var(--color-light-gray); padding: 15px; border-radius: 12px; border-left: 4px solid var(--color-danger);">
+                                <h4 style="color: var(--color-text); margin-bottom: 8px; font-weight: 600;">Pre-existing conditions</h4>
+                                <p style="color: var(--color-text-light); font-size: 0.9em; margin: 0;">Conditions present before policy start date are typically excluded (unless disclosed and later accepted).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span>💡</span>
+                        <div>
+                            <strong>Research Tip:</strong> Use this checklist when comparing different insurance providers. Take notes on each policy's specific terms and conditions to make an informed decision.
+                        </div>
+                    </div>
+
+                    <button class="nav-button primary" onclick="saveResearch()">💾 Save Research Progress</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateProgress() {
+            // Calculate progress for each section based on different input types
+            const sections = {
+                basic: checkBasicCompletion(),
+                coverage: checkCoverageCompletion(),
+                financial: checkFinancialCompletion(),
+                continuity: checkContinuityCompletion(),
+                claims: checkClaimsCompletion(),
+                exclusions: true // Always complete as it's just informational
+            };
+
+            // Update sidebar status indicators
+            Object.keys(sections).forEach(sectionKey => {
+                let statusElement;
+                switch(sectionKey) {
+                    case 'basic':
+                        statusElement = document.getElementById('basicStatus');
+                        break;
+                    case 'coverage':
+                        statusElement = document.getElementById('coverageStatus');
+                        break;
+                    case 'financial':
+                        statusElement = document.getElementById('financialStatus');
+                        break;
+                    case 'continuity':
+                        statusElement = document.getElementById('continuityStatus');
+                        break;
+                    case 'claims':
+                        statusElement = document.getElementById('claimsStatus');
+                        break;
+                    case 'exclusions':
+                        statusElement = document.getElementById('exclusionsStatus');
+                        break;
+                }
+                
+                if (statusElement) {
+                    statusElement.classList.toggle('complete', sections[sectionKey]);
+                }
+            });
+        }
+
+        function checkBasicCompletion() {
+            // Check if at least one policy type is selected and illness coverage is checked
+            const policyTypes = document.querySelectorAll('#basic-features input[type="checkbox"]');
+            const anyPolicyTypeChecked = Array.from(policyTypes).some(cb => cb.checked);
+            const waitingPeriod = document.getElementById('waiting-period').value.trim();
+            
+            return anyPolicyTypeChecked && waitingPeriod !== '';
+        }
+
+        function checkCoverageCompletion() {
+            const checkboxes = document.querySelectorAll('#coverage-details input[type="checkbox"]');
+            const checked = Array.from(checkboxes).filter(cb => cb.checked);
+            return checked.length >= Math.ceil(checkboxes.length * 0.5); // At least 50% checked
+        }
+
+        function checkFinancialCompletion() {
+            const textInputs = ['monthly-premium', 'excess-payment', 'annual-limit', 'condition-limit', 'time-limit'];
+            const completed = textInputs.filter(id => {
+                const element = document.getElementById(id);
+                return element && element.value.trim() !== '';
+            });
+            return completed.length >= Math.ceil(textInputs.length * 0.6); // At least 60% filled
+        }
+
+        function checkContinuityCompletion() {
+            const switchCancel = document.getElementById('switch-cancel').value.trim();
+            const renewalCoverage = document.getElementById('renewal-coverage').value;
+            const ageLimits = document.getElementById('age-limits').value.trim();
+            
+            const completed = [switchCancel, renewalCoverage, ageLimits].filter(val => val !== '').length;
+            return completed >= 2; // At least 2 out of 3 completed
+        }
+
+        function checkClaimsCompletion() {
+            const checkboxes = document.querySelectorAll('#claims-admin input[type="checkbox"]');
+            const checked = Array.from(checkboxes).filter(cb => cb.checked);
+            return checked.length >= checkboxes.length; // All checkboxes checked
+        }
+
+        function saveResearch() {
+            const data = {};
+            
+            // Collect all form data
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    data[input.id] = input.checked;
+                } else {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            // Calculate completion stats
+            const sections = {
+                basic: checkBasicCompletion(),
+                coverage: checkCoverageCompletion(),
+                financial: checkFinancialCompletion(),
+                continuity: checkContinuityCompletion(),
+                claims: checkClaimsCompletion(),
+                exclusions: true
+            };
+            
+            const completedSections = Object.values(sections).filter(Boolean).length;
+            const totalSections = Object.keys(sections).length;
+            const completionPercentage = Math.round((completedSections / totalSections) * 100);
+            
+            alert(`Research progress saved! 📋\n\nCompleted sections: ${completedSections}/${totalSections} (${completionPercentage}%)\n\nGreat job researching pet insurance options!`);
+        }
+
+        // Smooth scrolling for sidebar navigation
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all sidebar items
+                document.querySelectorAll('.sidebar-item').forEach(si => si.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Get target section
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    const targetSection = document.querySelector(href);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Update progress when checkboxes change
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                updateProgress();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
