@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitten Troubleshooting Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette, redistributed usage
+           ========================================================================== */
+        :root {
+            /* Primary Colors - Lighter Navy */
+            --color-primary: #5f7cae;           /* Lighter, brighter navy */
+            --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+            --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+            
+            /* Secondary Colors - Warmer Pink */
+            --color-secondary: #e8637a;         /* Warm coral-pink */
+            --color-secondary-light: #ed8296;   /* Lighter warm pink */
+            
+            /* Neutral Colors */
+            --color-white: #ffffff;
+            --color-light-gray: #f8f9fa;
+            --color-medium-gray: #e9ecef;
+            --color-dark-gray: #6c757d;
+            --color-text: #2c3e50;
+            --color-text-light: #6c757d;
+            
+            /* Status Colors - Softened Brights */
+            --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+            --color-warning: #e6941a;           /* Softened orange */
+            --color-danger: #e84545;            /* Muted coral red */
+            --color-info: #4a9de8;              /* Softened sky blue */
+            
+            /* Background Colors */
+            --bg-success: #e8f8f2;
+            --bg-warning: #fff8e1;
+            --bg-danger: #ffebee;
+            --bg-info: #e3f2fd;
+            
+            /* Border Colors */
+            --border-success: #c8f2e0;
+            --border-warning: #ffe0b2;
+            --border-danger: #ffcdd2;
+            --border-info: #bbdefb;
+            
+            /* Additional Muted Accents */
+            --color-accent-yellow: #f0d429;     /* Muted yellow */
+            --color-accent-purple: #9c3fa3;     /* Softened purple */
+            --color-accent-teal: #2e9688;       /* Muted teal */
+            --color-accent-coral: #e65a33;      /* Softened coral */
+            
+            /* Special Colors */
+            --color-muted: #8a9bb5;             /* Muted version of primary blue */
+            --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+            --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+            --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+            --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+            --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+            --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        /* Top Navigation - Journey Phases - Now with coral-pink accent */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-to-main {
+            background: var(--color-white-alpha-20);
+            color: var(--color-white);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+        }
+
+        .back-to-main:hover {
+            background: var(--color-white-alpha-30);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .journey-nav {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .journey-phase {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            color: var(--color-white-alpha-80);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .journey-phase.active {
+            color: var(--color-white);
+            border-bottom-color: var(--color-accent-yellow);
+            background: var(--color-white-alpha-20);
+        }
+
+        .journey-phase:hover {
+            color: var(--color-white);
+            background: var(--color-white-alpha-05);
+        }
+
+        .journey-phase .phase-number {
+            background: var(--color-white-alpha-20);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .journey-phase.active .phase-number {
+            background: var(--color-accent-yellow);
+            color: var(--color-text);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--color-white);
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--color-white);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 40px;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            border-left: 5px solid var(--color-secondary);
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-yellow) 50%, var(--color-info) 100%);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-light);
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        /* Main Content */
+        .content-area {
+            padding: 40px;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: var(--color-white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--color-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--color-light-gray);
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 50%, var(--color-info) 100%);
+        }
+
+        .info-card:nth-child(even)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 50%, var(--color-accent-yellow) 100%);
+        }
+
+        .info-card:nth-child(3n)::before {
+            background: linear-gradient(90deg, var(--color-info) 0%, var(--color-accent-teal) 50%, var(--color-accent-coral) 100%);
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .info-card h3 {
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 10px 0;
+            color: var(--color-text);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+            border-bottom: 1px solid var(--color-light-gray);
+            font-weight: 500;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .info-card li::before {
+            content: '●';
+            color: var(--color-secondary);
+            font-weight: bold;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* Alert Component */
+        .alert {
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-width: 2px;
+            border-style: solid;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--bg-info);
+            border-color: var(--color-info);
+            color: var(--color-info);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .page-header {
+                padding: 25px;
+            }
+            
+            .page-title {
+                font-size: 2em;
+            }
+            
+            .content-area {
+                padding: 25px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .info-card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.6em;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .page-subtitle {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Page Header -->
+        
+<!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+                <a role="button" href="../../index.html" class="back-to-main">
+                    ← Main Dashboard
+                </a>
+            </div>
+            
+            <div class="journey-nav">
+                <a href="1_signs_doing_great.html" class="journey-phase">
+                    <span class="phase-number">1</span>
+                    <span>Signs you're doing great</span>
+                </a>
+                <a href="2_whats_normal_page.html" class="journey-phase">
+                    <span class="phase-number">2</span>
+                    <span>What's normal?</span>
+                </a>
+                <a href="3_troubleshooting_guide.html" class="journey-phase active">
+                    <span class="phase-number">3</span>
+                    <span>Troubleshooting</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">🔧 Troubleshooting Guide</h1>
+            <p class="page-subtitle">Common kitten behaviors and how to handle them effectively</p>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Remember:</strong> Most kitten behaviors are normal and part of their development. Patience, consistency, and positive reinforcement are your best tools for guiding good habits.
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="info-card">
+                    <h3>🪵 Scratching Furniture</h3>
+                    <ul>
+                        <li>Provide vertical and horizontal scratching posts in high-traffic and resting areas.</li>
+                        <li>Use catnip or treats to encourage use.</li>
+                        <li>If scratching furniture, calmly pick up and place near post.</li>
+                        <li>Reward immediately after post use.</li>
+                        <li>Use furniture-safe deterrents (double-sided tape, covers) temporarily if needed.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🧤 Biting and Scratching (During Play)</h3>
+                    <ul>
+                        <li>End play before kitten gets overexcited or too rough.</li>
+                        <li>Redirect biting to toys—never use hands or feet as playthings.</li>
+                        <li>If bitten, stay still to avoid triggering prey response, then end interaction calmly.</li>
+                        <li>Use wand toys for distance and control.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🕵️ Curiosity & Safety</h3>
+                    <ul>
+                        <li>Expect your kitten to explore doors, drawers, and feet.</li>
+                        <li>Always check before closing appliances or stepping.</li>
+                        <li>Block access to dangerous spaces (e.g. behind washing machines).</li>
+                        <li>Supervise new environments and gradually increase freedom.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🙀 Demanding Behaviour</h3>
+                    <ul>
+                        <li>Ignore vocal or disruptive attention-seeking.</li>
+                        <li>Reward calm, relaxed behaviour with affection or treats.</li>
+                        <li>Create a predictable daily routine with regular play and contact.</li>
+                        <li>Never disturb a sleeping kitten—respect rest to build trust.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🧗 Jumping on Counters</h3>
+                    <ul>
+                        <li>Offer approved climbing areas (cat trees, window perches).</li>
+                        <li>Redirect to those spaces when they jump on counters.</li>
+                        <li>Make counters boring (remove enticing smells, use safe deterrents like foil).</li>
+                        <li>Reward use of preferred high spots.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🚪 Door Dashing</h3>
+                    <ul>
+                        <li>Keep exciting toys away from doors leading outside.</li>
+                        <li>Create a "buffer zone" (e.g. double door, screen, or baby gate).</li>
+                        <li>Distract or contain kitten when entering or leaving.</li>
+                        <li>Never reward door-dashing with attention or access.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🗣️ Bonus: Excessive Meowing</h3>
+                    <ul>
+                        <li>Rule out hunger, pain, or anxiety first.</li>
+                        <li>Avoid reinforcing meows by giving attention.</li>
+                        <li>Reward quiet moments with treats or play.</li>
+                        <li>Create a calm, enriching environment to reduce boredom.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
