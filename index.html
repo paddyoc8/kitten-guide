@@ -8,45 +8,45 @@
         /* ==========================================================================
            COLOR PALETTE VARIABLES - Same palette from original
            ========================================================================== */
-:root {
-    /* Primary Colors - Lighter Navy */
-    --color-primary: #5f7cae;           /* Lighter, brighter navy */
-    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
-    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
-    
-    /* Secondary Colors - Warmer Pink */
-    --color-secondary: #e8637a;         /* Warm coral-pink */
-    --color-secondary-light: #ed8296;   /* Lighter warm pink */
-    
-    /* Neutral Colors */
-    --color-white: #ffffff;
-    --color-light-gray: #f8f9fa;
-    --color-medium-gray: #e9ecef;
-    --color-dark-gray: #6c757d;
-    --color-text: #2c3e50;
-    --color-text-light: #6c757d;
-    
-    /* Status Colors - Softened Brights */
-    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
-    --color-warning: #e6941a;           /* Softened orange */
-    --color-danger: #e84545;            /* Muted coral red */
-    --color-info: #4a9de8;              /* Softened sky blue */
-    
-    /* Additional Muted Accents */
-    --color-accent-yellow: #f0d429;     /* Muted yellow */
-    --color-accent-purple: #9c3fa3;     /* Softened purple */
-    --color-accent-teal: #2e9688;       /* Muted teal */
-    --color-accent-coral: #e65a33;      /* Softened coral */
-    
-    /* Special Colors */
-    --color-muted: #8a9bb5;             /* Muted version of primary blue */
-    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
-    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
-    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
-    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
-    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
-    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
-}
+        :root {
+            /* Primary Colors - Lighter Navy */
+            --color-primary: #5f7cae;           /* Lighter, brighter navy */
+            --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+            --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+            
+            /* Secondary Colors - Warmer Pink */
+            --color-secondary: #e8637a;         /* Warm coral-pink */
+            --color-secondary-light: #ed8296;   /* Lighter warm pink */
+            
+            /* Neutral Colors */
+            --color-white: #ffffff;
+            --color-light-gray: #f8f9fa;
+            --color-medium-gray: #e9ecef;
+            --color-dark-gray: #6c757d;
+            --color-text: #2c3e50;
+            --color-text-light: #6c757d;
+            
+            /* Status Colors - Softened Brights */
+            --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+            --color-warning: #e6941a;           /* Softened orange */
+            --color-danger: #e84545;            /* Muted coral red */
+            --color-info: #4a9de8;              /* Softened sky blue */
+            
+            /* Additional Muted Accents */
+            --color-accent-yellow: #f0d429;     /* Muted yellow */
+            --color-accent-purple: #9c3fa3;     /* Softened purple */
+            --color-accent-teal: #2e9688;       /* Muted teal */
+            --color-accent-coral: #e65a33;      /* Softened coral */
+            
+            /* Special Colors */
+            --color-muted: #8a9bb5;             /* Muted version of primary blue */
+            --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+            --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+            --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+            --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+            --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+            --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+        }
 
         * {
             margin: 0;
@@ -126,7 +126,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            max-width: 900px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
@@ -327,7 +327,7 @@
                     <span class="nav-tile-cta">Start Planning →</span>
                 </a>
 
-                <a href="#" class="nav-tile" onclick="navigateToSection('first-month')">
+                <a href="pages/firstMonth/1_arrival_day_page.html" class="nav-tile">
                     <span class="nav-tile-icon">🗓️</span>
                     <h3>First Month</h3>
                     <p>Navigate those crucial first weeks with day-by-day guidance, milestones to watch for, and adjustment tips</p>
