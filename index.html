@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitten Journey Guide</title>
+    <style>
+        /* ==========================================================================
+           COLOR PALETTE VARIABLES - Same palette from original
+           ========================================================================== */
+:root {
+    /* Primary Colors - Lighter Navy */
+    --color-primary: #5f7cae;           /* Lighter, brighter navy */
+    --color-primary-dark: #4e6b9c;      /* Medium navy for hover states */
+    --color-primary-light: #7090c0;     /* Even lighter navy for active states */
+    
+    /* Secondary Colors - Warmer Pink */
+    --color-secondary: #e8637a;         /* Warm coral-pink */
+    --color-secondary-light: #ed8296;   /* Lighter warm pink */
+    
+    /* Neutral Colors */
+    --color-white: #ffffff;
+    --color-light-gray: #f8f9fa;
+    --color-medium-gray: #e9ecef;
+    --color-dark-gray: #6c757d;
+    --color-text: #2c3e50;
+    --color-text-light: #6c757d;
+    
+    /* Status Colors - Softened Brights */
+    --color-success: #4a9b6e;           /* Muted blue-green (more complementary) */
+    --color-warning: #e6941a;           /* Softened orange */
+    --color-danger: #e84545;            /* Muted coral red */
+    --color-info: #4a9de8;              /* Softened sky blue */
+    
+    /* Additional Muted Accents */
+    --color-accent-yellow: #f0d429;     /* Muted yellow */
+    --color-accent-purple: #9c3fa3;     /* Softened purple */
+    --color-accent-teal: #2e9688;       /* Muted teal */
+    --color-accent-coral: #e65a33;      /* Softened coral */
+    
+    /* Special Colors */
+    --color-muted: #8a9bb5;             /* Muted version of primary blue */
+    --color-overlay: rgba(95, 124, 174, 0.1);      /* Lighter navy overlay */
+    --color-overlay-dark: rgba(95, 124, 174, 0.4); /* Darker overlay */
+    --color-white-alpha-20: rgba(255, 255, 255, 0.2);
+    --color-white-alpha-30: rgba(255, 255, 255, 0.3);
+    --color-white-alpha-05: rgba(255, 255, 255, 0.05);
+    --color-white-alpha-80: rgba(255, 255, 255, 0.8);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-light-gray) 0%, var(--color-white) 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Banner */
+        .top-nav {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-header {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--color-white-alpha-20);
+        }
+
+        .app-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 25px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-message h2 {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .welcome-message p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 60px 30px;
+        }
+
+        /* Navigation Grid */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-tile {
+            background: var(--color-white);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--color-text);
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent-teal) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-tile:nth-child(2)::before {
+            background: linear-gradient(90deg, var(--color-accent-teal) 0%, var(--color-info) 100%);
+        }
+
+        .nav-tile:nth-child(3)::before {
+            background: linear-gradient(90deg, var(--color-info) 0%, var(--color-accent-purple) 100%);
+        }
+
+        .nav-tile:nth-child(4)::before {
+            background: linear-gradient(90deg, var(--color-accent-purple) 0%, var(--color-secondary) 100%);
+        }
+
+        .nav-tile:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: var(--color-secondary);
+        }
+
+        .nav-tile:hover::before {
+            transform: scaleX(1);
+        }
+
+        .nav-tile-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-tile:hover .nav-tile-icon {
+            transform: scale(1.1);
+        }
+
+        .nav-tile h3 {
+            font-size: 1.6em;
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .nav-tile p {
+            color: var(--color-text-light);
+            font-size: 1em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .nav-tile-cta {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-light) 100%);
+            color: var(--color-white);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .nav-tile:hover .nav-tile-cta {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 99, 122, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 30px;
+            background: var(--color-light-gray);
+            color: var(--color-text-light);
+        }
+
+        .footer p {
+            font-size: 0.9em;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .top-nav-header {
+                padding: 15px 20px;
+            }
+            
+            .app-title {
+                font-size: 2em;
+            }
+            
+            .welcome-message {
+                padding: 20px;
+            }
+            
+            .welcome-message h2 {
+                font-size: 1.2em;
+            }
+            
+            .welcome-message p {
+                font-size: 1em;
+            }
+            
+            .main-content {
+                padding: 40px 20px;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav-tile {
+                padding: 30px 20px;
+            }
+            
+            .nav-tile-icon {
+                font-size: 3em;
+            }
+            
+            .nav-tile h3 {
+                font-size: 1.4em;
+            }
+        }
+
+        /* Subtle animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-tile {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .nav-tile:nth-child(1) { animation-delay: 0.1s; }
+        .nav-tile:nth-child(2) { animation-delay: 0.2s; }
+        .nav-tile:nth-child(3) { animation-delay: 0.3s; }
+        .nav-tile:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation Banner -->
+        <div class="top-nav">
+            <div class="top-nav-header">
+                <div class="app-title">
+                    🐱 Kitten Journey Guide
+                </div>
+            </div>
+            
+            <div class="welcome-message">
+                <h2>Welcome to Your Complete Kitten Care Companion</h2>
+                <p>Everything you need to successfully welcome and care for your new feline friend</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="nav-grid">
+                <a href="pages/preparation/1_questions_before_adopting.html" class="nav-tile">
+                    <span class="nav-tile-icon">📋</span>
+                    <h3>Preparation</h3>
+                    <p>Get ready for your kitten's arrival with our comprehensive planning guide, home setup checklist, and timeline</p>
+                    <span class="nav-tile-cta">Start Planning →</span>
+                </a>
+
+                <a href="#" class="nav-tile" onclick="navigateToSection('first-month')">
+                    <span class="nav-tile-icon">🗓️</span>
+                    <h3>First Month</h3>
+                    <p>Navigate those crucial first weeks with day-by-day guidance, milestones to watch for, and adjustment tips</p>
+                    <span class="nav-tile-cta">View Timeline →</span>
+                </a>
+
+                <a href="#" class="nav-tile" onclick="navigateToSection('cat-care')">
+                    <span class="nav-tile-icon">❤️</span>
+                    <h3>Cat Care</h3>
+                    <p>Master the essentials of feeding, grooming, health care, and creating a loving environment for your cat</p>
+                    <span class="nav-tile-cta">Learn Care →</span>
+                </a>
+
+                <a href="#" class="nav-tile" onclick="navigateToSection('am-i-doing-right')">
+                    <span class="nav-tile-icon">🤔</span>
+                    <h3>Am I Doing This Right?</h3>
+                    <p>Get answers to common concerns, troubleshoot behavioral issues, and gain confidence in your cat parenting journey</p>
+                    <span class="nav-tile-cta">Get Help →</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🐾 Your journey to becoming an amazing cat parent starts here</p>
+        </div>
+    </div>
+
+    <script>
+        function navigateToSection(section) {
+            // This would typically navigate to different pages
+            // For now, we'll show an alert indicating which section was clicked
+            const sectionNames = {
+                'preparation': 'Preparation & Planning',
+                'first-month': 'First Month Guide',
+                'cat-care': 'Cat Care Essentials',
+                'am-i-doing-right': 'Am I Doing This Right?'
+            };
+            
+            alert(`Navigating to: ${sectionNames[section]}\n\nThis would typically take you to the ${sectionNames[section]} section of the guide.`);
+            
+            // In a real implementation, you might do:
+            // window.location.href = `${section}.html`;
+            // or use a single-page app router
+        }
+
+        // Add some subtle interactive feedback
+        document.addEventListener('DOMContentLoaded', function() {
+            const tiles = document.querySelectorAll('.nav-tile');
+            
+            tiles.forEach(tile => {
+                tile.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                tile.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -116,12 +116,14 @@
             font-weight: 600;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            text-decoration: none;
         }
 
         .back-to-main:hover {
             background: var(--color-white-alpha-30);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-decoration: none;
         }
 
         .journey-nav {
@@ -180,7 +182,7 @@
         .main-content {
             display: flex;
             flex: 1;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
             background: var(--color-white);
@@ -626,9 +628,9 @@
                 <div class="app-title">
                     🐱 Kitten Journey Guide
                 </div>
-                <button class="back-to-main" onclick="alert('This would navigate to the main dashboard')">
+                <a role="button" href="../../index.html" class="back-to-main">
                     ← Main Dashboard
-                </button>
+                </a>
             </div>
             
             <div class="journey-nav">
@@ -647,6 +649,18 @@
                 <a href="4_cat_proofing_page.html" class="journey-phase">
                     <span class="phase-number">4</span>
                     <span>Cat proofing</span>
+                </a>
+                <a href="5_future_planning_page.html" class="journey-phase">
+                    <span class="phase-number">5</span>
+                    <span>Future planning</span>
+                </a>
+                <a href="6_basic_supplies_page.html" class="journey-phase">
+                    <span class="phase-number">6</span>
+                    <span>Basic supplies</span>
+                </a>
+                <a href="7_toy-supplies-page.html" class="journey-phase">
+                    <span class="phase-number">7</span>
+                    <span>Toy supplies</span>
                 </a>
             </div>
         </div>
